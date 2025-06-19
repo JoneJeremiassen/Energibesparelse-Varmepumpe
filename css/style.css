@@ -503,3 +503,21 @@ tbody tr:hover {
     transform: translateY(-8px) rotate(-45deg);
   }
 }
+
+/* Prognosis note styling */
+.prognosis-note {
+  background-color: rgba(52, 152, 219, 0.1);
+  border-left: 4px solid var(--secondary-color);
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9em;
+  color: #555;
+  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.prognosis-note i {
+  color: var(--secondary-color);
+  margin-right: 8px;
+}
