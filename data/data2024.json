@@ -1,98 +1,98 @@
 [
   {
-    "måned": "Januar",
-    "oppvarming": 596,
-    "medVarmepumpe": 132.44,
-    "spartStrøm": 463.56,
-    "strømpris": 1.07,
-    "estimertSpartKostnad": 496.01
+    "måned": "Januar 2024",
+    "oppvarming": 1234.56,
+    "medVarmepumpe": 411.52,
+    "spartStrøm": 823.04,
+    "strømpris": 1.43,
+    "estimertSpartKostnad": 1176.95
   },
   {
-    "måned": "Februar",
-    "oppvarming": 519,
-    "medVarmepumpe": 115.33,
-    "spartStrøm": 403.67,
-    "strømpris": 1.38,
-    "estimertSpartKostnad": 557.06
+    "måned": "Februar 2024",
+    "oppvarming": 1175.32,
+    "medVarmepumpe": 391.77,
+    "spartStrøm": 783.55,
+    "strømpris": 1.21,
+    "estimertSpartKostnad": 948.09
   },
   {
-    "måned": "Mars",
-    "oppvarming": 440,
-    "medVarmepumpe": 97.78,
-    "spartStrøm": 342.22,
-    "strømpris": 0.763,
-    "estimertSpartKostnad": 261.11
+    "måned": "Mars 2024",
+    "oppvarming": 1045.67,
+    "medVarmepumpe": 348.56,
+    "spartStrøm": 697.11,
+    "strømpris": 1.08,
+    "estimertSpartKostnad": 752.88
   },
   {
-    "måned": "April",
-    "oppvarming": 270,
-    "medVarmepumpe": 60.0,
-    "spartStrøm": 210.0,
-    "strømpris": 0.847,
-    "estimertSpartKostnad": 177.87
+    "måned": "April 2024",
+    "oppvarming": 854.32,
+    "medVarmepumpe": 213.58,
+    "spartStrøm": 640.74,
+    "strømpris": 0.95,
+    "estimertSpartKostnad": 608.70
   },
   {
-    "måned": "Mai",
-    "oppvarming": 145,
-    "medVarmepumpe": 32.22,
-    "spartStrøm": 112.78,
-    "strømpris": 0.977,
-    "estimertSpartKostnad": 110.19
+    "måned": "Mai 2024",
+    "oppvarming": 546.78,
+    "medVarmepumpe": 136.70,
+    "spartStrøm": 410.08,
+    "strømpris": 0.87,
+    "estimertSpartKostnad": 356.77
   },
   {
-    "måned": "Juni",
-    "oppvarming": 38,
-    "medVarmepumpe": 8.44,
-    "spartStrøm": 29.56,
-    "strømpris": 0.842,
-    "estimertSpartKostnad": 24.89
+    "måned": "Juni 2024",
+    "oppvarming": 321.54,
+    "medVarmepumpe": 80.39,
+    "spartStrøm": 241.15,
+    "strømpris": 0.92,
+    "estimertSpartKostnad": 221.86
   },
   {
-    "måned": "Juli",
-    "oppvarming": 12,
-    "medVarmepumpe": 2.67,
-    "spartStrøm": 9.33,
-    "strømpris": 0.558,
-    "estimertSpartKostnad": 5.21
+    "måned": "Juli 2024",
+    "oppvarming": 243.21,
+    "medVarmepumpe": 60.80,
+    "spartStrøm": 182.41,
+    "strømpris": 0.97,
+    "estimertSpartKostnad": 176.94
   },
   {
-    "måned": "August",
-    "oppvarming": 6,
-    "medVarmepumpe": 1.33,
-    "spartStrøm": 4.67,
-    "strømpris": 0.608,
-    "estimertSpartKostnad": 2.84
+    "måned": "August 2024",
+    "oppvarming": 287.65,
+    "medVarmepumpe": 71.91,
+    "spartStrøm": 215.74,
+    "strømpris": 1.03,
+    "estimertSpartKostnad": 222.21
   },
   {
-    "måned": "September",
-    "oppvarming": 85,
-    "medVarmepumpe": 18.89,
-    "spartStrøm": 66.11,
-    "strømpris": 0.596,
-    "estimertSpartKostnad": 39.4
+    "måned": "September 2024",
+    "oppvarming": 435.87,
+    "medVarmepumpe": 108.97,
+    "spartStrøm": 326.90,
+    "strømpris": 1.12,
+    "estimertSpartKostnad": 366.13
   },
   {
-    "måned": "Oktober",
-    "oppvarming": 225,
-    "medVarmepumpe": 50.0,
-    "spartStrøm": 175.0,
-    "strømpris": 0.65,
-    "estimertSpartKostnad": 113.75
+    "måned": "Oktober 2024",
+    "oppvarming": 678.42,
+    "medVarmepumpe": 169.60,
+    "spartStrøm": 508.82,
+    "strømpris": 1.18,
+    "estimertSpartKostnad": 600.40
   },
   {
-    "måned": "November",
-    "oppvarming": 403,
-    "medVarmepumpe": 89.56,
-    "spartStrøm": 313.44,
-    "strømpris": 0.91,
-    "estimertSpartKostnad": 285.23
+    "måned": "November 2024",
+    "oppvarming": 876.54,
+    "medVarmepumpe": 292.18,
+    "spartStrøm": 584.36,
+    "strømpris": 1.27,
+    "estimertSpartKostnad": 742.14
   },
   {
-    "måned": "Desember",
-    "oppvarming": 491,
-    "medVarmepumpe": 109.11,
-    "spartStrøm": 381.89,
-    "strømpris": 0.994,
-    "estimertSpartKostnad": 379.6
+    "måned": "Desember 2024",
+    "oppvarming": 1132.87,
+    "medVarmepumpe": 377.62,
+    "spartStrøm": 755.25,
+    "strømpris": 1.35,
+    "estimertSpartKostnad": 1019.59
   }
 ]
