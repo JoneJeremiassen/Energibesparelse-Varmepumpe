@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateStatistics2024();
         initializeCharts2024();
         populateTable2024();
-        initializeComparisonChart();
+        // initializeComparisonChart(); // Deaktivert
         
         showLoader(false);
     } catch (error) {
@@ -281,88 +281,8 @@ function populateTable2024() {
 
 // Initialiserer sammenligningsgraf
 function initializeComparisonChart() {
-    const ctx = document.getElementById('comparison-chart-2024').getContext('2d');
-    
-    // Fiktive nasjonale gjennomsnitt (disse bør erstattes med reelle data)
-    const nationalAvg = [
-        650, 580, 490, 320, 160, 50, 20, 15, 100, 260, 450, 550
-    ];
-    
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: data2024.map(m => m.måned),
-            datasets: [
-                {
-                    label: 'Ditt forbruk med varmepumpe (kWh)',
-                    data: data2024.map(m => m.medVarmepumpe),
-                    backgroundColor: 'rgba(39, 174, 96, 0.2)',
-                    borderColor: 'rgba(39, 174, 96, 1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                },
-                {
-                    label: 'Ditt forbruk uten varmepumpe (kWh)',
-                    data: data2024.map(m => m.oppvarming),
-                    backgroundColor: 'rgba(231, 76, 60, 0.2)',
-                    borderColor: 'rgba(231, 76, 60, 1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                },
-                {
-                    label: 'Nasjonalt gjennomsnitt (kWh)',
-                    data: nationalAvg,
-                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    tension: 0.3,
-                    fill: false
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Energiforbruk (kWh)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Måned'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toLocaleString('nb-NO', { 
-                                    maximumFractionDigits: 2 
-                                }) + ' kWh';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
+    // Denne funksjonen er deaktivert
+    console.log("Sammenligning med nasjonale gjennomsnitt er deaktivert.");
 }
 
 
