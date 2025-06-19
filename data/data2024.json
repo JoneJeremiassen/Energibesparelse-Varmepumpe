@@ -2,92 +2,56 @@
   {
     "måned": "Januar 2024",
     "oppvarming": 1234.56,
-    "medVarmepumpe": 246.91,
-    "spartStrøm": 987.65,
-    "strømpris": 1.43,
-    "estimertSpartKostnad": 1412.34
+    "strømpris": 1.43
   },
   {
     "måned": "Februar 2024",
     "oppvarming": 1175.32,
-    "medVarmepumpe": 235.06,
-    "spartStrøm": 940.26,
-    "strømpris": 1.21,
-    "estimertSpartKostnad": 1137.71
+    "strømpris": 1.21
   },  {
     "måned": "Mars 2024",
     "oppvarming": 1045.67,
-    "medVarmepumpe": 209.13,
-    "spartStrøm": 836.54,
-    "strømpris": 1.08,
-    "estimertSpartKostnad": 903.46
+    "strømpris": 1.08
   },
   {
     "måned": "April 2024",
     "oppvarming": 854.32,
-    "medVarmepumpe": 170.86,
-    "spartStrøm": 683.46,
-    "strømpris": 0.95,
-    "estimertSpartKostnad": 649.29
+    "strømpris": 0.95
   },  {
     "måned": "Mai 2024",
     "oppvarming": 546.78,
-    "medVarmepumpe": 109.36,
-    "spartStrøm": 437.42,
-    "strømpris": 0.87,
-    "estimertSpartKostnad": 380.56
+    "strømpris": 0.87
   },
   {
     "måned": "Juni 2024",
     "oppvarming": 321.54,
-    "medVarmepumpe": 64.31,
-    "spartStrøm": 257.23,
-    "strømpris": 0.92,
-    "estimertSpartKostnad": 236.65
+    "strømpris": 0.92
   },  {
     "måned": "Juli 2024",
     "oppvarming": 243.21,
-    "medVarmepumpe": 48.64,
-    "spartStrøm": 194.57,
-    "strømpris": 0.97,
-    "estimertSpartKostnad": 188.73
+    "strømpris": 0.97
   },
   {
     "måned": "August 2024",
     "oppvarming": 287.65,
-    "medVarmepumpe": 57.53,
-    "spartStrøm": 230.12,
-    "strømpris": 1.03,
-    "estimertSpartKostnad": 237.02
+    "strømpris": 1.03
   },  {
     "måned": "September 2024",
     "oppvarming": 435.87,
-    "medVarmepumpe": 87.17,
-    "spartStrøm": 348.70,
-    "strømpris": 1.12,
-    "estimertSpartKostnad": 390.54
+    "strømpris": 1.12
   },
   {
     "måned": "Oktober 2024",
     "oppvarming": 678.42,
-    "medVarmepumpe": 135.68,
-    "spartStrøm": 542.74,
-    "strømpris": 1.18,
-    "estimertSpartKostnad": 640.43
+    "strømpris": 1.18
   },  {
     "måned": "November 2024",
     "oppvarming": 876.54,
-    "medVarmepumpe": 175.31,
-    "spartStrøm": 701.23,
-    "strømpris": 1.27,
-    "estimertSpartKostnad": 890.56
+    "strømpris": 1.27
   },
   {
     "måned": "Desember 2024",
     "oppvarming": 1132.87,
-    "medVarmepumpe": 226.57,
-    "spartStrøm": 906.30,
-    "strømpris": 1.35,
-    "estimertSpartKostnad": 1223.50
+    "strømpris": 1.35
   }
 ]

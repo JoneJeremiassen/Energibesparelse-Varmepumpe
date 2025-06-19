@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Vent til data er ferdig lastet
         if (data2023.length === 0) {
             try {
-                data2023 = await fetchData('data/data2023.json');
+                // Hent rådata
+                const rawData = await fetchRawData('data/data2023.json');
                 
                 // Fjern duplikatmåneder hvis de finnes i datasettet
-                // I data2023.json er det noen duplikate måneder (f.eks. Juli til Desember er duplisert)
                 const uniqueMonths = new Set();
-                data2023 = data2023.filter(item => {
+                const filteredData = rawData.filter(item => {
                     if (uniqueMonths.has(item.måned)) {
                         console.log(`Fjerner duplikat måned: ${item.måned}`);
                         return false;
@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     uniqueMonths.add(item.måned);
                     return true;
                 });
+                
+                // Beregn dynamiske verdier basert på COP
+                data2023 = calculateDerivedValues(filteredData);
                 
                 console.log(`Data 2023 lastet, antall måneder: ${data2023.length}`);
             } catch (error) {
@@ -253,6 +256,11 @@ function initializeCharts2023() {
 // Fyller tabellen med data for 2023
 function populateTable2023() {
     const tableBody = document.getElementById('data-table-body-2023');
+    if (!tableBody) {
+        console.error('Table body for 2023 not found');
+        return;
+    }
+    
     tableBody.innerHTML = '';
     
     let totalOppvarming = 0;
@@ -261,6 +269,21 @@ function populateTable2023() {
     let totalStrompris = 0;
     let totalKostnadSpart = 0;
     let validMonths = 0;
+    
+    // Legg til informasjon om nåværende COP-verdi
+    const tableInfo = document.querySelector('.table-info');
+    if (tableInfo) {
+        tableInfo.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
+    } else {
+        // Opprett informasjonselement hvis det ikke finnes
+        const tableContainer = document.querySelector('.table-container');
+        if (tableContainer) {
+            const infoElement = document.createElement('div');
+            infoElement.className = 'table-info';
+            infoElement.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
+            tableContainer.insertBefore(infoElement, tableContainer.firstChild);
+        }
+    }
     
     data2023.forEach((month, index) => {
         if (month.oppvarming !== null) {

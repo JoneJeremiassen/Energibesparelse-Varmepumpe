@@ -5,14 +5,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Last inn data fra JSON-filer hvis ikke allerede lastet
         if (data2024.length === 0) {
-            data2024 = await fetchData('data/data2024.json');
+            // Hent rådata
+            const rawData = await fetchRawData('data/data2024.json');
+            
+            // Beregn dynamiske verdier basert på COP
+            data2024 = calculateDerivedValues(rawData);
         }
         
         // Initialiser UI
         updateStatistics2024();
         initializeCharts2024();
         populateTable2024();
-        // initializeComparisonChart(); // Deaktivert
         
         showLoader(false);
     } catch (error) {
@@ -227,6 +230,11 @@ function initializeCharts2024() {
 // Fyller tabellen med data for 2024
 function populateTable2024() {
     const tableBody = document.getElementById('data-table-body-2024');
+    if (!tableBody) {
+        console.error('Table body for 2024 not found');
+        return;
+    }
+    
     tableBody.innerHTML = '';
     
     let totalOppvarming = 0;
@@ -235,6 +243,21 @@ function populateTable2024() {
     let totalStrompris = 0;
     let totalKostnadSpart = 0;
     let validMonths = 0;
+    
+    // Legg til informasjon om nåværende COP-verdi
+    const tableInfo = document.querySelector('.table-info');
+    if (tableInfo) {
+        tableInfo.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
+    } else {
+        // Opprett informasjonselement hvis det ikke finnes
+        const tableContainer = document.querySelector('.table-container');
+        if (tableContainer) {
+            const infoElement = document.createElement('div');
+            infoElement.className = 'table-info';
+            infoElement.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
+            tableContainer.insertBefore(infoElement, tableContainer.firstChild);
+        }
+    }
     
     data2024.forEach((month, index) => {
         if (month.oppvarming !== null) {

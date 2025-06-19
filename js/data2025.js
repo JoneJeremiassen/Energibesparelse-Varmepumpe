@@ -5,10 +5,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Last inn data fra JSON-filer hvis ikke allerede lastet
         if (data2024.length === 0) {
-            data2024 = await fetchData('data/data2024.json');
+            const rawData2024 = await fetchRawData('data/data2024.json');
+            data2024 = calculateDerivedValues(rawData2024);
         }
         if (data2025.length === 0) {
-            data2025 = await fetchData('data/data2025.json');
+            const rawData2025 = await fetchRawData('data/data2025.json');
+            data2025 = calculateDerivedValues(rawData2025);
         }
         
         // Initialiser UI
@@ -230,6 +232,11 @@ function initializeCharts2025() {
 // Fyller tabellen med data for 2025
 function populateTable2025() {
     const tableBody = document.getElementById('data-table-body-2025');
+    if (!tableBody) {
+        console.error('Table body for 2025 not found');
+        return;
+    }
+    
     tableBody.innerHTML = '';
     
     let totalOppvarming = 0;
@@ -238,6 +245,21 @@ function populateTable2025() {
     let totalStrompris = 0;
     let totalKostnadSpart = 0;
     let validMonths = 0;
+    
+    // Legg til informasjon om nåværende COP-verdi
+    const tableInfo = document.querySelector('.table-info');
+    if (tableInfo) {
+        tableInfo.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
+    } else {
+        // Opprett informasjonselement hvis det ikke finnes
+        const tableContainer = document.querySelector('.table-container');
+        if (tableContainer) {
+            const infoElement = document.createElement('div');
+            infoElement.className = 'table-info';
+            infoElement.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
+            tableContainer.insertBefore(infoElement, tableContainer.firstChild);
+        }
+    }
     
     data2025.forEach((month, index) => {
         if (month.oppvarming !== null) {

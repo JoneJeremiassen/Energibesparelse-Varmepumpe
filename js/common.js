@@ -2,6 +2,7 @@
 let data2023 = [];
 let data2024 = [];
 let data2025 = [];
+let varmepumpeCOP = 5.0; // Standard COP-verdi
 
 // Laster inn data ved oppstart
 document.addEventListener('DOMContentLoaded', async () => {
@@ -46,7 +47,25 @@ async function fetchData(url) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return await response.json();
+        const data = await response.json();
+        // Beregn dynamiske verdier basert på COP
+        return data.map(month => {
+            if (month.oppvarming === null || month.strømpris === null) {
+                return month;
+            }
+            
+            // Kalkuler dynamiske verdier basert på COP
+            const medVarmepumpe = month.oppvarming / varmepumpeCOP;
+            const spartStrøm = month.oppvarming - medVarmepumpe;
+            const estimertSpartKostnad = spartStrøm * month.strømpris;
+            
+            return {
+                ...month,
+                medVarmepumpe,
+                spartStrøm,
+                estimertSpartKostnad
+            };
+        });
     } catch (error) {
         console.error('Feil ved henting av data:', error);
         throw error;
@@ -73,6 +92,9 @@ function initNavigation() {
     
     // Initialiser temabytte-funksjonalitet
     initThemeSwitch();
+    
+    // Initialiser COP-kontroller
+    initCOPControl();
 }
 
 // Funksjon for å håndtere temabytte (dark/light mode)
@@ -183,4 +205,148 @@ function generateStatistics(data, year) {
         besparelsesProsent,
         availableMonths
     };
+}
+
+// Funksjon for å håndtere COP-innstillinger
+function initCOPControl() {
+    // Sjekk om det finnes en lagret COP-verdi
+    const storedCOP = localStorage.getItem('varmepumpeCOP');
+    if (storedCOP) {
+        varmepumpeCOP = parseFloat(storedCOP);
+    }
+    
+    // Finn COP-kontrolleren eller opprett den hvis den ikke finnes
+    let copContainer = document.querySelector('.cop-control-container');
+    
+    if (!copContainer) {
+        // Opprett COP-kontroller hvis den ikke finnes
+        copContainer = document.createElement('div');
+        copContainer.className = 'cop-control-container';
+        
+        const navContainer = document.querySelector('.nav-container');
+        if (navContainer) {
+            navContainer.appendChild(copContainer);
+        }
+    }
+    
+    // Opprett innholdet i COP-kontrolleren
+    copContainer.innerHTML = `
+        <div class="cop-control">
+            <label for="cop-slider">Varmepumpe COP: <span id="cop-value">${varmepumpeCOP.toFixed(1)}</span></label>
+            <input type="range" id="cop-slider" min="1" max="10" step="0.1" value="${varmepumpeCOP}">
+            <button id="reset-cop" title="Tilbakestill til standard verdi (5.0)">
+                <i class="fas fa-undo"></i>
+            </button>
+        </div>
+    `;
+    
+    // Legg til event listeners
+    const copSlider = document.getElementById('cop-slider');
+    const copValue = document.getElementById('cop-value');
+    const resetCOP = document.getElementById('reset-cop');
+    
+    if (copSlider && copValue) {
+        copSlider.addEventListener('input', async (e) => {
+            const newCOP = parseFloat(e.target.value);
+            varmepumpeCOP = newCOP;
+            copValue.textContent = newCOP.toFixed(1);
+            localStorage.setItem('varmepumpeCOP', newCOP.toString());
+            
+            // Oppdater dataene med ny COP-verdi
+            await recalculateData();
+        });
+    }
+    
+    if (resetCOP) {
+        resetCOP.addEventListener('click', async () => {
+            varmepumpeCOP = 5.0;
+            if (copSlider) copSlider.value = "5.0";
+            if (copValue) copValue.textContent = "5.0";
+            localStorage.setItem('varmepumpeCOP', "5.0");
+            
+            // Oppdater dataene med ny COP-verdi
+            await recalculateData();
+        });
+    }
+}
+
+// Oppdaterer alle data med ny COP-verdi
+async function recalculateData() {
+    try {
+        showLoader(true);
+        
+        // Last inn dataene på nytt fra JSON
+        const rawData2023 = await fetchRawData('data/data2023.json');
+        const rawData2024 = await fetchRawData('data/data2024.json');
+        const rawData2025 = await fetchRawData('data/data2025.json');
+        
+        // Beregn nye verdier basert på oppdatert COP
+        data2023 = calculateDerivedValues(rawData2023);
+        data2024 = calculateDerivedValues(rawData2024);
+        data2025 = calculateDerivedValues(rawData2025);
+        
+        // Oppdater UI avhengig av hvilken side vi er på
+        const path = window.location.pathname;
+        
+        if (path.includes('data2023.html')) {
+            updateStatistics2023();
+            initializeCharts2023();
+            populateTable2023();
+        } else if (path.includes('data2024.html')) {
+            updateStatistics2024();
+            initializeCharts2024();
+            populateTable2024();
+        } else if (path.includes('data2025.html')) {
+            updateStatistics2025();
+            initializeCharts2025();
+            populateTable2025();
+        } else if (path.includes('index.html') || path.endsWith('/')) {
+            updateStatistics();
+            initializeSummaryChart();
+        }
+        
+        showLoader(false);
+    } catch (error) {
+        console.error('Feil ved oppdatering av data:', error);
+        showLoader(false);
+    }
+}
+
+// Henter rådata fra JSON-filer uten å beregne dynamiske verdier
+async function fetchRawData(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Feil ved henting av rådata:', error);
+        throw error;
+    }
+}
+
+// Beregner dynamiske verdier basert på COP
+function calculateDerivedValues(data) {
+    return data.map(month => {
+        if (month.oppvarming === null || month.strømpris === null) {
+            return {
+                ...month,
+                medVarmepumpe: null,
+                spartStrøm: null,
+                estimertSpartKostnad: null
+            };
+        }
+        
+        const medVarmepumpe = month.oppvarming / varmepumpeCOP;
+        const spartStrøm = month.oppvarming - medVarmepumpe;
+        const estimertSpartKostnad = spartStrøm * month.strømpris;
+        
+        return {
+            ...month,
+            medVarmepumpe,
+            spartStrøm,
+            estimertSpartKostnad
+        };
+    });
 }
