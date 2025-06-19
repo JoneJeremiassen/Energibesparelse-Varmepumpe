@@ -3,12 +3,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         showLoader(true);
         
-        // Last inn data fra JSON-filer hvis ikke allerede lastet
-        if (data2024.length === 0) {
-            data2024 = await fetchData('data/data2024.json');
-        }
-        if (data2025.length === 0) {
-            data2025 = await fetchData('data/data2025.json');
+        // Vent til data er ferdig lastet fra common.js
+        if (data2024.length === 0 || data2025.length === 0) {
+            const loadData = async () => {
+                if (data2024.length === 0) {
+                    data2024 = await fetchData('data/data2024.json');
+                }
+                if (data2025.length === 0) {
+                    data2025 = await fetchData('data/data2025.json');
+                }
+            };
+            await loadData();
         }
         
         // Initialiser UI
