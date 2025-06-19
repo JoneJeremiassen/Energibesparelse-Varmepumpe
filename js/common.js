@@ -70,6 +70,40 @@ function initNavigation() {
             navLinks.classList.remove('active');
         });
     });
+    
+    // Initialiser temabytte-funksjonalitet
+    initThemeSwitch();
+}
+
+// Funksjon for å håndtere temabytte (dark/light mode)
+function initThemeSwitch() {
+    const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+    const themeIcon = document.querySelector('.theme-icon i');
+    
+    if (!toggleSwitch) return; // Gå ut hvis bryteren ikke finnes
+    
+    // Sjekk om brukeren har en foretrukket temainnstilling
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+        toggleSwitch.checked = true;
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
+    }
+    
+    // Funksjonen som bytter tema
+    function switchTheme(e) {
+        if (e.target.checked) {
+            document.body.classList.add('light-mode');
+            localStorage.setItem('theme', 'light');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            document.body.classList.remove('light-mode');
+            localStorage.setItem('theme', 'dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }    
+    }
+    
+    // Legg til event listener for temabryteren
+    toggleSwitch.addEventListener('change', switchTheme, false);
 }
 
 // Formaterer verdier for visning
