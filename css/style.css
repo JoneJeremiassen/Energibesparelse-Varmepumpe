@@ -117,7 +117,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  max-width: 1200px;
+  max-width: 1400px;
+  width: 95%;
   margin: 0 auto;
   height: 60px;
   position: relative; /* Sikrer stabil posisjonering */
@@ -154,17 +155,18 @@ body {
 }
 
 .nav-item {
-  margin-left: 20px;
+  margin-left: 15px;
 }
 
 .nav-item a {
   color: var(--nav-text);
   text-decoration: none;
-  padding: 10px;
+  padding: 8px 10px;
   border-radius: 4px;
   transition: background-color 0.3s;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 
 .nav-item a i {
@@ -195,7 +197,8 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
+  width: 95%;
   margin: 0 auto;
   padding: 20px;
 }
@@ -380,6 +383,20 @@ tbody tr:hover {
     border-radius: 5px;
 }
 
+/* Animasjoner for innhold */
+.fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+.fade-in-fast {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .container {
@@ -402,18 +419,44 @@ tbody tr:hover {
 
 /* Loader */
 .loader {
-  border: 5px solid #f3f3f3;
+  border: 5px solid rgba(243, 243, 243, 0.3);
   border-top: 5px solid var(--secondary-color);
   border-radius: 50%;
   width: 50px;
   height: 50px;
   animation: spin 1s linear infinite;
   margin: 20px auto;
+  position: relative;
+}
+
+.loader::after {
+  content: 'Beregner...';
+  position: absolute;
+  width: 120px;
+  text-align: center;
+  font-size: 0.9rem;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--secondary-color);
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Mini-loader for COP updates */
+.mini-loader {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(243, 243, 243, 0.3);
+  border-top: 2px solid var(--warning-yellow);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  margin-left: 5px;
 }
 
 /* Export buttons */
@@ -818,4 +861,18 @@ input:checked + .slider:before {
         width: 100%;
         justify-content: center;
     }
+}
+
+/* COP updating animation */
+.cop-updating {
+    display: inline-block;
+    position: relative;
+    animation: pulse 1.5s infinite;
+    color: var(--warning-yellow);
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
 }

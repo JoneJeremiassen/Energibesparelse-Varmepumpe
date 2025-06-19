@@ -3,6 +3,7 @@ let data2023 = [];
 let data2024 = [];
 let data2025 = [];
 let varmepumpeCOP = 5.0; // Standard COP-verdi
+let debounceTimer; // For å forhindre for mange oppdateringer ved COP-endring
 
 // Laster inn data ved oppstart
 document.addEventListener('DOMContentLoaded', async () => {
@@ -162,11 +163,22 @@ function showLoader(show) {
     const content = document.getElementById('content');
     
     if (show) {
-        if (loader) loader.style.display = 'block';
+        if (loader) {
+            loader.style.display = 'block';
+            loader.setAttribute('aria-label', 'Laster data...');
+        }
         if (content) content.style.display = 'none';
     } else {
         if (loader) loader.style.display = 'none';
-        if (content) content.style.display = 'block';
+        if (content) {
+            content.style.display = 'block';
+            
+            // Legg til fade-in effekt når innholdet vises på nytt
+            content.classList.add('fade-in-fast');
+            setTimeout(() => {
+                content.classList.remove('fade-in-fast');
+            }, 500);
+        }
     }
 }
 
@@ -244,28 +256,41 @@ function initCOPControl() {
     const copSlider = document.getElementById('cop-slider');
     const copValue = document.getElementById('cop-value');
     const resetCOP = document.getElementById('reset-cop');
-    
-    if (copSlider && copValue) {
-        copSlider.addEventListener('input', async (e) => {
+      if (copSlider && copValue) {
+        copSlider.addEventListener('input', (e) => {
             const newCOP = parseFloat(e.target.value);
             varmepumpeCOP = newCOP;
             copValue.textContent = newCOP.toFixed(1);
             localStorage.setItem('varmepumpeCOP', newCOP.toString());
             
-            // Oppdater dataene med ny COP-verdi
-            await recalculateData();
+            // Vis en mini-loader ved COP-verdien
+            copValue.innerHTML = `<span class="cop-updating">${newCOP.toFixed(1)}</span>`;
+            
+            // Debounce - venter med å oppdatere til slideren stopper
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(async () => {
+                // Oppdater dataene med ny COP-verdi
+                await recalculateData();
+                // Oppdater COP-visningen når dataene er klare
+                copValue.textContent = newCOP.toFixed(1);
+            }, 300);
         });
     }
-    
-    if (resetCOP) {
-        resetCOP.addEventListener('click', async () => {
+      if (resetCOP) {
+        resetCOP.addEventListener('click', () => {
             varmepumpeCOP = 5.0;
             if (copSlider) copSlider.value = "5.0";
-            if (copValue) copValue.textContent = "5.0";
+            if (copValue) {
+                copValue.innerHTML = `<span class="cop-updating">5.0</span>`;
+            }
             localStorage.setItem('varmepumpeCOP', "5.0");
             
-            // Oppdater dataene med ny COP-verdi
-            await recalculateData();
+            // Vis loading indikator og oppdater data
+            setTimeout(async () => {
+                // Oppdater dataene med ny COP-verdi
+                await recalculateData();
+                if (copValue) copValue.textContent = "5.0";
+            }, 10);
         });
     }
 }
