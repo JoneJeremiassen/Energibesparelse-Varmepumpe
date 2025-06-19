@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         initializeCharts2024();
         populateTable2024();
         initializeComparisonChart();
-        setupExportButtons();
         
         showLoader(false);
     } catch (error) {
@@ -366,18 +365,4 @@ function initializeComparisonChart() {
     });
 }
 
-// Setter opp eksportknapper
-function setupExportButtons() {
-    // CSV eksport
-    document.getElementById('export-csv-2024').addEventListener('click', () => {
-        exportToCSV(data2024, 'energidata_2024.csv');
-    });
-    
-    // Excel eksport
-    document.getElementById('export-excel-2024').addEventListener('click', () => {
-        exportToExcel(data2024, 'energidata_2024.xlsx');
-    });
-    
-    // Utskrift
-    setupPrintButton('print-data-2024');
-}
+

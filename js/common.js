@@ -82,66 +82,7 @@ function calculateAccumulatedSavings(data, monthIndex) {
     return accumulated;
 }
 
-// Eksporterer data til CSV
-function exportToCSV(data, filename) {
-    const csvRows = [];
-    
-    // Header
-    const headers = ['Måned', 'Oppvarming (kWh)', 'Med varmepumpe (kWh)', 
-                     'Spart strøm (kWh)', 'Strømpris (kr/kWh)', 
-                     'Estimert spart kostnad (kr)', 'Akkumulert besparelse (kr)'];
-    csvRows.push(headers.join(','));
-    
-    // Data rows
-    let accumulated = 0;
-    data.forEach((row, index) => {
-        if (row.oppvarming !== null) {
-            accumulated += row.estimertSpartKostnad;
-            
-            const values = [
-                row.måned,
-                row.oppvarming,
-                row.medVarmepumpe,
-                row.spartStrøm,
-                row.strømpris,
-                row.estimertSpartKostnad,
-                accumulated
-            ];
-            
-            csvRows.push(values.join(','));
-        }
-    });
-    
-    // Create CSV file
-    const csvString = csvRows.join('\n');
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    
-    // Create download link
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, filename);
-    } else {
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-}
 
-// Eksporterer data til Excel (simulert)
-function exportToExcel(data, filename) {
-    alert('Eksport til Excel er ikke implementert enda. Data eksporteres som CSV i stedet.');
-    exportToCSV(data, filename.replace('.xlsx', '.csv'));
-}
-
-// Initialiserer utskriftsfunksjonalitet
-function setupPrintButton(buttonId) {
-    document.getElementById(buttonId).addEventListener('click', () => {
-        window.print();
-    });
-}
 
 // Viser eller skjuler lasteskjerm
 function showLoader(show) {

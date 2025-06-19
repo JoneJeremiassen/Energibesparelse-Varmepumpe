@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         initializeCharts2025();
         populateTable2025();
         initializePrognosisChart();
-        setupExportButtons();
-        setupDataEntryForm();
         
         showLoader(false);
     } catch (error) {
@@ -412,80 +410,4 @@ function initializePrognosisChart() {
     });
 }
 
-// Setter opp skjema for dataregistrering
-function setupDataEntryForm() {
-    const form = document.getElementById('data-entry-form');
-    const formMessage = document.getElementById('form-message');
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const month = document.getElementById('month-select').value;
-        const oppvarming = parseFloat(document.getElementById('oppvarming-input').value);
-        const strompris = parseFloat(document.getElementById('strompris-input').value);
-        
-        if (!month || isNaN(oppvarming) || isNaN(strompris)) {
-            formMessage.textContent = 'Vennligst fyll ut alle felter korrekt.';
-            formMessage.className = 'form-message error';
-            return;
-        }
-        
-        // Beregn verdier basert på oppvarming og strømpris
-        const COP = 4.5; // Coefficient of Performance for varmepumpen
-        const medVarmepumpe = oppvarming / COP;
-        const spartStrom = oppvarming - medVarmepumpe;
-        const estimertSpartKostnad = spartStrom * strompris;
-        
-        // Finn og oppdater månedsobjektet
-        const monthIndex = data2025.findIndex(m => m.måned === month);
-        if (monthIndex !== -1) {
-            data2025[monthIndex].oppvarming = oppvarming;
-            data2025[monthIndex].medVarmepumpe = medVarmepumpe;
-            data2025[monthIndex].spartStrøm = spartStrom;
-            data2025[monthIndex].strømpris = strompris;
-            data2025[monthIndex].estimertSpartKostnad = estimertSpartKostnad;
-            
-            // Vis bekreftelsesmelding
-            formMessage.textContent = `Data for ${month} 2025 er lagret. Beregnet besparelse: ${estimertSpartKostnad.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
-            formMessage.className = 'form-message success';
-            
-            // Oppdater UI
-            updateStatistics2025();
-            initializeCharts2025();
-            populateTable2025();
-            initializePrognosisChart();
-            
-            // Nullstill skjema
-            form.reset();
-            
-            // Simuler lagring til server (dette er bare en demonstrasjon)
-            console.log('Data som ville blitt lagret:', data2025[monthIndex]);
-            alert('Merk: I en ekte applikasjon ville dataene nå blitt lagret på serveren. I denne demonstrasjonen er endringene midlertidige og vil forsvinne ved oppdatering av siden.');
-        } else {
-            formMessage.textContent = 'Feil ved lagring av data. Prøv igjen senere.';
-            formMessage.className = 'form-message error';
-        }
-    });
-    
-    // Reset form message on input change
-    form.addEventListener('input', function() {
-        formMessage.textContent = '';
-        formMessage.className = 'form-message';
-    });
-}
 
-// Setter opp eksportknapper
-function setupExportButtons() {
-    // CSV eksport
-    document.getElementById('export-csv-2025').addEventListener('click', () => {
-        exportToCSV(data2025, 'energidata_2025.csv');
-    });
-    
-    // Excel eksport
-    document.getElementById('export-excel-2025').addEventListener('click', () => {
-        exportToExcel(data2025, 'energidata_2025.xlsx');
-    });
-    
-    // Utskrift
-    setupPrintButton('print-data-2025');
-}
