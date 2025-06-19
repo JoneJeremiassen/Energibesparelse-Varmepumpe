@@ -1,0 +1,98 @@
+[
+  {
+    "måned": "Januar",
+    "oppvarming": 596,
+    "medVarmepumpe": 132.44,
+    "spartStrøm": 463.56,
+    "strømpris": 1.07,
+    "estimertSpartKostnad": 496.01
+  },
+  {
+    "måned": "Februar",
+    "oppvarming": 519,
+    "medVarmepumpe": 115.33,
+    "spartStrøm": 403.67,
+    "strømpris": 1.38,
+    "estimertSpartKostnad": 557.06
+  },
+  {
+    "måned": "Mars",
+    "oppvarming": 440,
+    "medVarmepumpe": 97.78,
+    "spartStrøm": 342.22,
+    "strømpris": 0.763,
+    "estimertSpartKostnad": 261.11
+  },
+  {
+    "måned": "April",
+    "oppvarming": 270,
+    "medVarmepumpe": 60.0,
+    "spartStrøm": 210.0,
+    "strømpris": 0.847,
+    "estimertSpartKostnad": 177.87
+  },
+  {
+    "måned": "Mai",
+    "oppvarming": 145,
+    "medVarmepumpe": 32.22,
+    "spartStrøm": 112.78,
+    "strømpris": 0.977,
+    "estimertSpartKostnad": 110.19
+  },
+  {
+    "måned": "Juni",
+    "oppvarming": 38,
+    "medVarmepumpe": 8.44,
+    "spartStrøm": 29.56,
+    "strømpris": 0.842,
+    "estimertSpartKostnad": 24.89
+  },
+  {
+    "måned": "Juli",
+    "oppvarming": 12,
+    "medVarmepumpe": 2.67,
+    "spartStrøm": 9.33,
+    "strømpris": 0.558,
+    "estimertSpartKostnad": 5.21
+  },
+  {
+    "måned": "August",
+    "oppvarming": 6,
+    "medVarmepumpe": 1.33,
+    "spartStrøm": 4.67,
+    "strømpris": 0.608,
+    "estimertSpartKostnad": 2.84
+  },
+  {
+    "måned": "September",
+    "oppvarming": 85,
+    "medVarmepumpe": 18.89,
+    "spartStrøm": 66.11,
+    "strømpris": 0.596,
+    "estimertSpartKostnad": 39.4
+  },
+  {
+    "måned": "Oktober",
+    "oppvarming": 225,
+    "medVarmepumpe": 50.0,
+    "spartStrøm": 175.0,
+    "strømpris": 0.65,
+    "estimertSpartKostnad": 113.75
+  },
+  {
+    "måned": "November",
+    "oppvarming": 403,
+    "medVarmepumpe": 89.56,
+    "spartStrøm": 313.44,
+    "strømpris": 0.91,
+    "estimertSpartKostnad": 285.23
+  },
+  {
+    "måned": "Desember",
+    "oppvarming": 491,
+    "medVarmepumpe": 109.11,
+    "spartStrøm": 381.89,
+    "strømpris": 0.994,
+    "estimertSpartKostnad": 379.6
+  }
+]

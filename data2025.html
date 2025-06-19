@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energidata 2025 - Varmepumpe Besparelse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigasjonsbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-bolt"></i> Energibesparelse
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Hjem</a></li>
+                <li class="nav-item"><a href="data2024.html"><i class="fas fa-calendar"></i> Energidata 2024</a></li>
+                <li class="nav-item active"><a href="data2025.html"><i class="fas fa-calendar-alt"></i> Energidata 2025</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>Energidata 2025</h1>
+            <p class="subtitle">Detaljert analyse av strømbesparelse for året 2025</p>
+        </header>
+        
+        <div id="loader" class="loader"></div>
+        
+        <div id="error-message" class="error" style="display: none;"></div>
+        
+        <div id="content" style="display: none;">
+            <!-- Statistikk-kort for 2025 -->
+            <section class="stats-container fade-in">
+                <div class="stat-card">
+                    <h3>Total oppvarming 2025</h3>
+                    <div id="total-oppvarming-2025" class="stat-value">0 kWh</div>
+                    <p>Totalt strømforbruk til oppvarming</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Total besparelse 2025</h3>
+                    <div id="total-sparing-2025" class="stat-value positive">0 kWh</div>
+                    <p>Total strømbesparelse med varmepumpe</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Besparelsesprosent 2025</h3>
+                    <div id="prosent-sparing-2025" class="stat-value positive">0%</div>
+                    <p>Prosent av strømforbruk spart</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Kostnadsbesparelse 2025</h3>
+                    <div id="total-kostnadsbesparelse-2025" class="stat-value positive">0 kr</div>
+                    <p>Total økonomisk besparelse</p>
+                </div>
+            </section>
+            
+            <!-- Prognosegraf -->
+            <section class="prognosis-section fade-in">
+                <h2>Prognoser for resten av 2025</h2>
+                <div class="chart-container">
+                    <canvas id="prognosis-chart-2025" class="chart"></canvas>
+                </div>
+                <p class="prognosis-note">
+                    * Prognosene er basert på historiske data fra 2024 og tilgjengelige data for 2025. 
+                    Faktiske verdier kan variere basert på klimatiske forhold og strømpriser.
+                </p>
+            </section>
+            
+            <!-- Grafer for 2025 -->
+            <section class="charts fade-in">
+                <h2>Energiforbruk 2025</h2>
+                
+                <div class="chart-container">
+                    <canvas id="energy-chart-2025" class="chart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="savings-chart-2025" class="chart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="price-chart-2025" class="chart"></canvas>
+                </div>
+            </section>
+            
+            <!-- Tabelldata for 2025 -->
+            <section class="data-section fade-in">
+                <h2>Detaljert energidata 2025</h2>
+                
+                <div class="table-container">
+                    <table id="data-table-2025">
+                        <thead>
+                            <tr>
+                                <th>Måned</th>
+                                <th>Oppvarming (kWh)</th>
+                                <th>Med varmepumpe (kWh)</th>
+                                <th>Spart strøm (kWh)</th>
+                                <th>Strømpris (kr/kWh)</th>
+                                <th>Estimert spart kostnad (kr)</th>
+                                <th>Akkumulert besparelse (kr)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-table-body-2025">
+                            <!-- Data fylles inn dynamisk fra JavaScript -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Sum 2025 (hittil)</th>
+                                <th id="sum-oppvarming-2025">0</th>
+                                <th id="sum-med-varmepumpe-2025">0</th>
+                                <th id="sum-spart-2025">0</th>
+                                <th id="avg-strompris-2025">0</th>
+                                <th id="sum-kostnad-spart-2025">0</th>
+                                <th id="total-akkumulert-2025">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                
+                <!-- Eksport knapper -->
+                <div class="export-buttons">
+                    <button id="export-csv-2025" class="export-button">
+                        <i class="fas fa-file-csv"></i> Eksporter til CSV
+                    </button>
+                    <button id="export-excel-2025" class="export-button">
+                        <i class="fas fa-file-excel"></i> Eksporter til Excel
+                    </button>
+                    <button id="print-data-2025" class="export-button">
+                        <i class="fas fa-print"></i> Skriv ut
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Dataregistrering -->
+            <section class="data-entry-section fade-in">
+                <h2>Registrer ny data for 2025</h2>
+                <form id="data-entry-form">
+                    <div class="form-group">
+                        <label for="month-select">Måned:</label>
+                        <select id="month-select" required>
+                            <option value="">Velg måned</option>
+                            <option value="Juli">Juli</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="Oktober">Oktober</option>
+                            <option value="November">November</option>
+                            <option value="Desember">Desember</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="oppvarming-input">Oppvarming (kWh):</label>
+                        <input type="number" id="oppvarming-input" min="0" step="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="strompris-input">Strømpris (kr/kWh):</label>
+                        <input type="number" id="strompris-input" min="0" step="0.001" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="submit-button">
+                            <i class="fas fa-save"></i> Lagre data
+                        </button>
+                        <button type="reset" class="reset-button">
+                            <i class="fas fa-undo"></i> Nullstill
+                        </button>
+                    </div>
+                </form>
+                <div id="form-message" class="form-message"></div>
+            </section>
+        </div>
+        
+        <footer class="footer">
+            <p>Dataene er sist oppdatert: juni 2025 | © 2025</p>
+        </footer>
+    </div>
+    
+    <script src="js/common.js"></script>
+    <script src="js/data2025.js"></script>
+</body>
+</html>

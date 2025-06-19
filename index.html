@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energibesparelse med Varmepumpe 2024–2025</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigasjonsbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-bolt"></i> Energibesparelse
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item active"><a href="index.html"><i class="fas fa-home"></i> Hjem</a></li>
+                <li class="nav-item"><a href="data2024.html"><i class="fas fa-calendar"></i> Energidata 2024</a></li>
+                <li class="nav-item"><a href="data2025.html"><i class="fas fa-calendar-alt"></i> Energidata 2025</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>Energibesparelse med Varmepumpe</h1>
+            <p class="subtitle">Analyse av strømbesparelse og kostnadsreduksjon 2024–2025</p>
+        </header>
+          <div id="loader" class="loader"></div>
+        
+        <div id="error-message" class="error" style="display: none;"></div>
+        
+        <div id="content" style="display: none;">
+            <!-- Statistikk-kort -->
+            <section class="stats-container fade-in">
+                <div class="stat-card">
+                    <h3>Total oppvarming</h3>
+                    <div id="total-oppvarming" class="stat-value">0 kWh</div>
+                    <p>Totalt strømforbruk til oppvarming</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Total besparelse</h3>
+                    <div id="total-sparing" class="stat-value positive">0 kWh</div>
+                    <p>Total strømbesparelse med varmepumpe</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Besparelsesprosent</h3>
+                    <div id="prosent-sparing" class="stat-value positive">0%</div>
+                    <p>Prosent av strømforbruk spart</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Kostnadsbesparelse</h3>
+                    <div id="total-kostnadsbesparelse" class="stat-value positive">0 kr</div>
+                    <p>Total økonomisk besparelse</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Gjennomsnittlig besparelse</h3>
+                    <div id="snitt-besparelse" class="stat-value positive">0 kr</div>
+                    <p>Gjennomsnittlig besparelse per måned</p>
+                </div>
+            </section>
+            
+            <!-- Grafer på forsiden - Oppsummering -->
+            <section class="charts fade-in">
+                <h2>Energibesparelse oversikt</h2>
+                
+                <div class="chart-container">
+                    <canvas id="summary-chart" class="chart"></canvas>
+                </div>
+            </section>
+            
+            <!-- Informasjon og tips -->
+            <section class="info-section fade-in">
+                <h2>Informasjon om varmepumper</h2>
+                
+                <div class="info-container">
+                    <h3>Hvordan fungerer varmepumper?</h3>
+                    <p>
+                        En varmepumpe overfører varme fra en kilde (som uteluften) til et annet sted (som inneluften). 
+                        Dette gjøres med mindre energibruk enn direkte oppvarming, noe som gir betydelige energibesparelser.
+                    </p>
+                    
+                    <h3>Fordeler med varmepumpe</h3>
+                    <ul>
+                        <li>Reduserer strømforbruket til oppvarming med opptil 75%</li>
+                        <li>Kan brukes til både oppvarming og kjøling</li>
+                        <li>Gir bedre inneklima med filtrert luft</li>
+                        <li>Lang levetid på 10-15 år</li>
+                        <li>Miljøvennlig oppvarmingsløsning</li>
+                    </ul>
+                    
+                    <h3>Beregningsmetode</h3>
+                    <p>
+                        Dataene i denne oversikten er basert på faktisk energiforbruk før installasjon av varmepumpe, 
+                        og beregnet forbruk etter installasjon. Besparelsen er beregnet med en antatt effektfaktor (COP) 
+                        på 4.5, som betyr at varmepumpen produserer 4.5 ganger mer varmeenergi enn den bruker av elektrisk energi.
+                    </p>
+                </div>
+            </section>
+            
+            <!-- Call to action for detailed pages -->
+            <section class="cta-section fade-in">
+                <h2>Se detaljert data</h2>
+                <div class="cta-container">
+                    <a href="data2024.html" class="cta-button">
+                        <i class="fas fa-chart-line"></i> Detaljert data for 2024
+                    </a>
+                    <a href="data2025.html" class="cta-button">
+                        <i class="fas fa-chart-bar"></i> Detaljert data for 2025
+                    </a>
+                </div>
+            </section>
+        </div>
+    
+        <tr>
+            <td>2024</td>
+            <td>Februar</td>
+            <td>519</td>
+            <td>115.33</td>
+            <td>403.67</td>
+            <td>1.38</td>
+            <td>557.06</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>Mars</td>
+            <td>440</td>
+            <td>97.78</td>
+            <td>342.22</td>
+            <td>0.763</td>
+            <td>261.11</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>April</td>
+            <td>270</td>
+            <td>60.0</td>
+            <td>210.0</td>
+            <td>0.847</td>
+            <td>177.87</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>Mai</td>
+            <td>145</td>
+            <td>32.22</td>
+            <td>112.78</td>
+            <td>0.977</td>
+            <td>110.19</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>Juni</td>
+            <td>38</td>
+            <td>8.44</td>
+            <td>29.56</td>
+            <td>0.842</td>
+            <td>24.89</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>Juli</td>
+            <td>12</td>
+            <td>2.67</td>
+            <td>9.33</td>
+            <td>0.558</td>
+            <td>5.21</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>August</td>
+            <td>6</td>
+            <td>1.33</td>
+            <td>4.67</td>
+            <td>0.608</td>
+            <td>2.84</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>September</td>
+            <td>85</td>
+            <td>18.89</td>
+            <td>66.11</td>
+            <td>0.596</td>
+            <td>39.4</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>Oktober</td>
+            <td>225</td>
+            <td>50.0</td>
+            <td>175.0</td>
+            <td>0.65</td>
+            <td>113.75</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>November</td>
+            <td>403</td>
+            <td>89.56</td>
+            <td>313.44</td>
+            <td>0.91</td>
+            <td>285.23</td>
+        </tr>
+    
+        <tr>
+            <td>2024</td>
+            <td>Desember</td>
+            <td>491</td>
+            <td>109.11</td>
+            <td>381.89</td>
+            <td>0.994</td>
+            <td>379.6</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Januar</td>
+            <td>596</td>
+            <td>132.44</td>
+            <td>463.56</td>
+            <td>1.07</td>
+            <td>496.01</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Februar</td>
+            <td>519</td>
+            <td>115.33</td>
+            <td>403.67</td>
+            <td>1.38</td>
+            <td>557.06</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Mars</td>
+            <td>440</td>
+            <td>97.78</td>
+            <td>342.22</td>
+            <td>0.763</td>
+            <td>261.11</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>April</td>
+            <td>270</td>
+            <td>60.0</td>
+            <td>210.0</td>
+            <td>0.847</td>
+            <td>177.87</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Mai</td>
+            <td>145</td>
+            <td>32.22</td>
+            <td>112.78</td>
+            <td>0.977</td>
+            <td>110.19</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Juni</td>
+            <td>38</td>
+            <td>8.44</td>
+            <td>29.56</td>
+            <td>0.842</td>
+            <td>24.89</td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Juli</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>August</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>September</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>Oktober</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>2025</td>
+            <td>November</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Informasjon og tips -->
+            <section class="info-section fade-in">
+                <h2>Informasjon om varmepumper</h2>
+                
+                <div class="info-container">
+                    <h3>Hvordan fungerer varmepumper?</h3>
+                    <p>
+                        En varmepumpe overfører varme fra en kilde (som uteluften) til et annet sted (som inneluften). 
+                        Dette gjøres med mindre energibruk enn direkte oppvarming, noe som gir betydelige energibesparelser.
+                    </p>
+                    
+                    <h3>Fordeler med varmepumpe</h3>
+                    <ul>
+                        <li>Reduserer strømforbruket til oppvarming med opptil 75%</li>
+                        <li>Kan brukes til både oppvarming og kjøling</li>
+                        <li>Gir bedre inneklima med filtrert luft</li>
+                        <li>Lang levetid på 10-15 år</li>
+                        <li>Miljøvennlig oppvarmingsløsning</li>
+                    </ul>
+                    
+                    <h3>Beregningsmetode</h3>
+                    <p>
+                        Dataene i denne oversikten er basert på faktisk energiforbruk før installasjon av varmepumpe, 
+                        og beregnet forbruk etter installasjon. Besparelsen er beregnet med en antatt effektfaktor (COP) 
+                        på 4.5, som betyr at varmepumpen produserer 4.5 ganger mer varmeenergi enn den bruker av elektrisk energi.
+                    </p>
+                </div>
+            </section>
+        </div>
+        
+        <footer class="footer">
+            <p>Dataene er sist oppdatert: juni 2025 | © 2025</p>
+        </footer>
+    </div>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>

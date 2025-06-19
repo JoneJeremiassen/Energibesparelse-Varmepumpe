@@ -1,0 +1,98 @@
+[
+  {
+    "måned": "Januar",
+    "oppvarming": 596,
+    "medVarmepumpe": 132.44,
+    "spartStrøm": 463.56,
+    "strømpris": 1.07,
+    "estimertSpartKostnad": 496.01
+  },
+  {
+    "måned": "Februar",
+    "oppvarming": 519,
+    "medVarmepumpe": 115.33,
+    "spartStrøm": 403.67,
+    "strømpris": 1.38,
+    "estimertSpartKostnad": 557.06
+  },
+  {
+    "måned": "Mars",
+    "oppvarming": 440,
+    "medVarmepumpe": 97.78,
+    "spartStrøm": 342.22,
+    "strømpris": 0.763,
+    "estimertSpartKostnad": 261.11
+  },
+  {
+    "måned": "April",
+    "oppvarming": 270,
+    "medVarmepumpe": 60.0,
+    "spartStrøm": 210.0,
+    "strømpris": 0.847,
+    "estimertSpartKostnad": 177.87
+  },
+  {
+    "måned": "Mai",
+    "oppvarming": 145,
+    "medVarmepumpe": 32.22,
+    "spartStrøm": 112.78,
+    "strømpris": 0.977,
+    "estimertSpartKostnad": 110.19
+  },
+  {
+    "måned": "Juni",
+    "oppvarming": 38,
+    "medVarmepumpe": 8.44,
+    "spartStrøm": 29.56,
+    "strømpris": 0.842,
+    "estimertSpartKostnad": 24.89
+  },
+  {
+    "måned": "Juli",
+    "oppvarming": null,
+    "medVarmepumpe": null,
+    "spartStrøm": null,
+    "strømpris": null,
+    "estimertSpartKostnad": null
+  },
+  {
+    "måned": "August",
+    "oppvarming": null,
+    "medVarmepumpe": null,
+    "spartStrøm": null,
+    "strømpris": null,
+    "estimertSpartKostnad": null
+  },
+  {
+    "måned": "September",
+    "oppvarming": null,
+    "medVarmepumpe": null,
+    "spartStrøm": null,
+    "strømpris": null,
+    "estimertSpartKostnad": null
+  },
+  {
+    "måned": "Oktober",
+    "oppvarming": null,
+    "medVarmepumpe": null,
+    "spartStrøm": null,
+    "strømpris": null,
+    "estimertSpartKostnad": null
+  },
+  {
+    "måned": "November",
+    "oppvarming": null,
+    "medVarmepumpe": null,
+    "spartStrøm": null,
+    "strømpris": null,
+    "estimertSpartKostnad": null
+  },
+  {
+    "måned": "Desember",
+    "oppvarming": null,
+    "medVarmepumpe": null,
+    "spartStrøm": null,
+    "strømpris": null,
+    "estimertSpartKostnad": null
+  }
+]

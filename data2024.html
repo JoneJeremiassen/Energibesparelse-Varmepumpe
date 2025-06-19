@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energidata 2024 - Varmepumpe Besparelse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigasjonsbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-bolt"></i> Energibesparelse
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Hjem</a></li>
+                <li class="nav-item active"><a href="data2024.html"><i class="fas fa-calendar"></i> Energidata 2024</a></li>
+                <li class="nav-item"><a href="data2025.html"><i class="fas fa-calendar-alt"></i> Energidata 2025</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>Energidata 2024</h1>
+            <p class="subtitle">Detaljert analyse av strømbesparelse for året 2024</p>
+        </header>
+        
+        <div id="loader" class="loader"></div>
+        
+        <div id="error-message" class="error" style="display: none;"></div>
+        
+        <div id="content" style="display: none;">
+            <!-- Statistikk-kort for 2024 -->
+            <section class="stats-container fade-in">
+                <div class="stat-card">
+                    <h3>Total oppvarming 2024</h3>
+                    <div id="total-oppvarming-2024" class="stat-value">0 kWh</div>
+                    <p>Totalt strømforbruk til oppvarming</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Total besparelse 2024</h3>
+                    <div id="total-sparing-2024" class="stat-value positive">0 kWh</div>
+                    <p>Total strømbesparelse med varmepumpe</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Besparelsesprosent 2024</h3>
+                    <div id="prosent-sparing-2024" class="stat-value positive">0%</div>
+                    <p>Prosent av strømforbruk spart</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Kostnadsbesparelse 2024</h3>
+                    <div id="total-kostnadsbesparelse-2024" class="stat-value positive">0 kr</div>
+                    <p>Total økonomisk besparelse</p>
+                </div>
+            </section>
+            
+            <!-- Grafer for 2024 -->
+            <section class="charts fade-in">
+                <h2>Energiforbruk 2024</h2>
+                
+                <div class="chart-container">
+                    <canvas id="energy-chart-2024" class="chart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="savings-chart-2024" class="chart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="price-chart-2024" class="chart"></canvas>
+                </div>
+            </section>
+            
+            <!-- Tabelldata for 2024 -->
+            <section class="data-section fade-in">
+                <h2>Detaljert energidata 2024</h2>
+                
+                <div class="table-container">
+                    <table id="data-table-2024">
+                        <thead>
+                            <tr>
+                                <th>Måned</th>
+                                <th>Oppvarming (kWh)</th>
+                                <th>Med varmepumpe (kWh)</th>
+                                <th>Spart strøm (kWh)</th>
+                                <th>Strømpris (kr/kWh)</th>
+                                <th>Estimert spart kostnad (kr)</th>
+                                <th>Akkumulert besparelse (kr)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-table-body-2024">
+                            <!-- Data fylles inn dynamisk fra JavaScript -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Sum 2024</th>
+                                <th id="sum-oppvarming-2024">0</th>
+                                <th id="sum-med-varmepumpe-2024">0</th>
+                                <th id="sum-spart-2024">0</th>
+                                <th id="avg-strompris-2024">0</th>
+                                <th id="sum-kostnad-spart-2024">0</th>
+                                <th id="total-akkumulert-2024">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                
+                <!-- Eksport knapper -->
+                <div class="export-buttons">
+                    <button id="export-csv-2024" class="export-button">
+                        <i class="fas fa-file-csv"></i> Eksporter til CSV
+                    </button>
+                    <button id="export-excel-2024" class="export-button">
+                        <i class="fas fa-file-excel"></i> Eksporter til Excel
+                    </button>
+                    <button id="print-data-2024" class="export-button">
+                        <i class="fas fa-print"></i> Skriv ut
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Sammenligning med nasjonale gjennomsnitt -->
+            <section class="comparison-section fade-in">
+                <h2>Sammenligning med gjennomsnitt</h2>
+                <div class="chart-container">
+                    <canvas id="comparison-chart-2024" class="chart"></canvas>
+                </div>
+                <p class="comparison-note">
+                    * Nasjonale gjennomsnitt er basert på data fra Statistisk sentralbyrå (SSB) for tilsvarende boligtype og region.
+                </p>
+            </section>
+        </div>
+        
+        <footer class="footer">
+            <p>Dataene er sist oppdatert: juni 2025 | © 2025</p>
+        </footer>
+    </div>
+    
+    <script src="js/common.js"></script>
+    <script src="js/data2024.js"></script>
+</body>
+</html>
