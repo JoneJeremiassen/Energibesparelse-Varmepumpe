@@ -2,23 +2,35 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         showLoader(true);
+          // Vent til data er ferdig lastet
+        const checkDataLoaded = async () => {
+            // Vent på at dataene skal lastes inn hvis de ikke allerede er lastet
+            if (data2024.length === 0 || data2025.length === 0) {
+                try {
+                    if (data2024.length === 0) {
+                        data2024 = await fetchData('data/data2024.json');
+                    }
+                    if (data2025.length === 0) {
+                        data2025 = await fetchData('data/data2025.json');
+                    }
+                } catch (error) {
+                    console.error("Feil ved datahenting:", error);
+                    throw error;
+                }
+            }
+        };
         
-        // Vent til data er ferdig lastet fra common.js
-        if (data2024.length === 0 || data2025.length === 0) {
-            const loadData = async () => {
-                if (data2024.length === 0) {
-                    data2024 = await fetchData('data/data2024.json');
-                }
-                if (data2025.length === 0) {
-                    data2025 = await fetchData('data/data2025.json');
-                }
-            };
-            await loadData();
+        await checkDataLoaded();
+          // Kontroller at data faktisk er lastet
+        if (data2024.length > 0 && data2025.length > 0) {
+            // Initialiser UI
+            updateStatistics();
+            initializeSummaryChart();
+        } else {
+            console.error("Ingen data tilgjengelig etter lasting");
+            document.getElementById('error-message').textContent = 
+                'Kunne ikke laste inn data. Vennligst prøv igjen senere.';
         }
-        
-        // Initialiser UI
-        updateStatistics();
-        initializeSummaryChart();
         
         showLoader(false);
     } catch (error) {
@@ -31,6 +43,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Oppdaterer statistikkene øverst på siden
 function updateStatistics() {
+    // Sikre at det er data å jobbe med
+    if (!data2024 || !data2025 || data2024.length === 0 || data2025.length === 0) {
+        console.error("Mangler data for statistikkoppdatering");
+        return;
+    }
+    
     // Beregn statistikk for 2024
     const stats2024 = generateStatistics(data2024);
     
@@ -44,25 +62,52 @@ function updateStatistics() {
     const besparelsesProsent = totalOppvarming > 0 
         ? (totalSpart / totalOppvarming) * 100 
         : 0;
-    const availableMonths = stats2024.availableMonths + stats2025.availableMonths;
-    const avgSavings = availableMonths > 0 ? totalKostnadSpart / availableMonths : 0;
+    const availableMonths = stats2024.availableMonths + stats2025.availableMonths;    const avgSavings = availableMonths > 0 ? totalKostnadSpart / availableMonths : 0;
     
     // Oppdater statistikk på forsiden
-    document.getElementById('total-oppvarming').textContent = 
-        `${totalOppvarming.toLocaleString('nb-NO')} kWh`;
-    document.getElementById('total-sparing').textContent = 
-        `${totalSpart.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kWh`;
-    document.getElementById('prosent-sparing').textContent = 
-        `${besparelsesProsent.toLocaleString('nb-NO', { maximumFractionDigits: 1 })}%`;
-    document.getElementById('total-kostnadsbesparelse').textContent = 
-        `${totalKostnadSpart.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
-    document.getElementById('snitt-besparelse').textContent = 
-        `${avgSavings.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
+    const totalOppvarmingElement = document.getElementById('total-oppvarming');
+    if (totalOppvarmingElement) {
+        totalOppvarmingElement.textContent = `${totalOppvarming.toLocaleString('nb-NO')} kWh`;
+    }
+    
+    const totalSparingElement = document.getElementById('total-sparing');
+    if (totalSparingElement) {
+        totalSparingElement.textContent = `${totalSpart.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kWh`;
+    }
+    
+    const prosentSparingElement = document.getElementById('prosent-sparing');
+    if (prosentSparingElement) {
+        prosentSparingElement.textContent = `${besparelsesProsent.toLocaleString('nb-NO', { maximumFractionDigits: 1 })}%`;
+    }
+    
+    const totalKostnadsbesparelseElement = document.getElementById('total-kostnadsbesparelse');
+    if (totalKostnadsbesparelseElement) {
+        totalKostnadsbesparelseElement.textContent = `${totalKostnadSpart.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
+    }
+    
+    const snittBesparelseElement = document.getElementById('snitt-besparelse');
+    if (snittBesparelseElement) {        snittBesparelseElement.textContent = `${avgSavings.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
+    }
 }
 
 // Initialiserer sammendragsgrafen på forsiden
 function initializeSummaryChart() {
-    const ctx = document.getElementById('summary-chart').getContext('2d');
+    const chartElement = document.getElementById('summary-chart');
+    if (!chartElement) {
+        console.error("Kunne ikke finne summary-chart elementet");
+        return;
+    }
+    
+    const ctx = chartElement.getContext('2d');    if (!ctx) {
+        console.error("Kunne ikke få 2d-kontekst fra canvas");
+        return;
+    }
+    
+    // Sikre at det er data å jobbe med
+    if (!data2024 || !data2025 || data2024.length === 0 || data2025.length === 0) {
+        console.error("Mangler data for grafoppdatering");
+        return;
+    }
     
     // Beregn månedlige besparelser for 2024
     const savings2024 = data2024.map(m => m.estimertSpartKostnad);
@@ -175,46 +220,6 @@ function initializeSummaryChart() {
     });
 }
 
-// Håndterer tab-funksjonalitet
-function initializeTabs() {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            currentYear = tab.getAttribute('data-year');
-            showYear(currentYear);
-            updateStatistics();
-            updateChart();
-        });
-    });
-}
-
-// Viser data for valgt år
-function showYear(year) {
-    const tableBody = document.getElementById('data-table-body');
-    tableBody.innerHTML = '';
-    
-    const data = year === '2024' ? data2024 : data2025;
-    
-    data.forEach(month => {
-        const row = document.createElement('tr');
-        
-        row.innerHTML = `
-            <td>${year}</td>
-            <td>${month.måned}</td>
-            <td>${formatValue(month.oppvarming)}</td>
-            <td>${formatValue(month.medVarmepumpe)}</td>
-            <td>${formatValue(month.spartStrøm)}</td>
-            <td>${formatValue(month.strømpris, 'kr')}</td>
-            <td>${formatValue(month.estimertSpartKostnad, 'kr')}</td>
-        `;
-        
-        tableBody.appendChild(row);
-    });
-}
-
 // Formaterer verdier for visning
 function formatValue(value, unit = '') {
     if (value === null || value === undefined || value === '') {
@@ -228,11 +233,8 @@ function formatValue(value, unit = '') {
     return unit ? `${formattedValue} ${unit}` : formattedValue;
 }
 
-// Oppdaterer statistikkene øverst på siden
-function updateStatistics() {
-    const data = currentYear === '2024' ? data2024 : data2025;
-    
-    // Beregn totalverdier
+// Hjelpefunksjon for å generere statistikk for et bestemt år
+function generateStatistics(data) {
     let totalOppvarming = 0;
     let totalMedVarmepumpe = 0;
     let totalSpart = 0;
@@ -249,159 +251,13 @@ function updateStatistics() {
         }
     });
     
-    // Beregn gjennomsnittlig besparelse
-    const avgSavings = availableMonths > 0 ? totalKostnadSpart / availableMonths : 0;
-    const besparelsesProsent = totalOppvarming > 0 
-        ? (totalSpart / totalOppvarming) * 100 
-        : 0;
-    
-    // Oppdater statistikk
-    document.getElementById('total-oppvarming').textContent = 
-        `${totalOppvarming.toLocaleString('nb-NO')} kWh`;
-    document.getElementById('total-sparing').textContent = 
-        `${totalSpart.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kWh`;
-    document.getElementById('prosent-sparing').textContent = 
-        `${besparelsesProsent.toLocaleString('nb-NO', { maximumFractionDigits: 1 })}%`;
-    document.getElementById('total-kostnadsbesparelse').textContent = 
-        `${totalKostnadSpart.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
-    document.getElementById('snitt-besparelse').textContent = 
-        `${avgSavings.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr`;
-}
-
-// Initialiserer Chart.js grafer
-function initializeCharts() {
-    const ctx = document.getElementById('energy-chart').getContext('2d');
-    
-    chartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: data2024.map(m => m.måned),
-            datasets: [
-                {
-                    label: 'Oppvarming uten varmepumpe (kWh)',
-                    data: data2024.map(m => m.oppvarming),
-                    backgroundColor: 'rgba(231, 76, 60, 0.7)',
-                    borderColor: 'rgba(231, 76, 60, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Oppvarming med varmepumpe (kWh)',
-                    data: data2024.map(m => m.medVarmepumpe),
-                    backgroundColor: 'rgba(39, 174, 96, 0.7)',
-                    borderColor: 'rgba(39, 174, 96, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Strømforbruk (kWh)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Måned'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toLocaleString('nb-NO', { 
-                                    maximumFractionDigits: 2 
-                                }) + ' kWh';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-    
-    // Initialize savings chart
-    const ctxSavings = document.getElementById('savings-chart').getContext('2d');
-    new Chart(ctxSavings, {
-        type: 'line',
-        data: {
-            labels: data2024.map(m => m.måned),
-            datasets: [
-                {
-                    label: 'Estimert kostnadsbesparelse (kr)',
-                    data: data2024.map(m => m.estimertSpartKostnad),
-                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Besparelse (kr)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Måned'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toLocaleString('nb-NO', { 
-                                    maximumFractionDigits: 2 
-                                }) + ' kr';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Oppdaterer Chart.js grafen når året endres
-function updateChart() {
-    const data = currentYear === '2024' ? data2024 : data2025;
-    
-    chartInstance.data.datasets[0].data = data.map(m => m.oppvarming);
-    chartInstance.data.datasets[1].data = data.map(m => m.medVarmepumpe);
-    
-    chartInstance.update();
+    return {
+        totalOppvarming,
+        totalMedVarmepumpe,
+        totalSpart,
+        totalKostnadSpart,
+        availableMonths
+    };
 }
 
 // Viser eller skjuler lasteskjerm

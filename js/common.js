@@ -11,14 +11,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         showLoader(true);
         
         // Last inn data fra JSON-filer
-        data2024 = await fetchData('data/data2024.json');
-        data2025 = await fetchData('data/data2025.json');
+        try {
+            console.log("Common.js: Starter datahenting");
+            data2024 = await fetchData('data/data2024.json');
+            console.log("Common.js: Data 2024 lastet, antall måneder:", data2024.length);
+            data2025 = await fetchData('data/data2025.json');
+            console.log("Common.js: Data 2025 lastet, antall måneder:", data2025.length);
+        } catch (fetchError) {
+            console.error("Common.js: Feil ved datahenting:", fetchError);
+            throw fetchError;
+        }
         
-        showLoader(false);
+        // La script.js håndtere innlasting for forsiden
+        if (!window.location.pathname.includes('index.html') && !window.location.pathname.endsWith('/')) {
+            showLoader(false);
+        }
     } catch (error) {
-        console.error('Feil ved oppstart:', error);
-        document.getElementById('error-message').textContent = 
-            'Kunne ikke laste inn data. Vennligst prøv igjen senere.';
+        console.error('Common.js: Feil ved oppstart:', error);
+        const errorElement = document.getElementById('error-message');
+        if (errorElement) {
+            errorElement.textContent = 'Kunne ikke laste inn data. Vennligst prøv igjen senere.';
+            errorElement.style.display = 'block';
+        }
         showLoader(false);
     }
 });
