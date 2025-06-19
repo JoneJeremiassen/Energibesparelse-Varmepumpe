@@ -1,0 +1,146 @@
+[
+  {
+    "måned": "Januar",
+    "oppvarming": 476,
+    "medVarmepumpe": 285.59999999999997,
+    "spartStrøm": 190.40000000000003,
+    "strømpris": 1.67,
+    "estimertSpartKostnad": 317.968
+  },
+  {
+    "måned": "Februar",
+    "oppvarming": 411,
+    "medVarmepumpe": 246.6,
+    "spartStrøm": 164.4,
+    "strømpris": 1.47,
+    "estimertSpartKostnad": 241.668
+  },
+  {
+    "måned": "Mars",
+    "oppvarming": 527,
+    "medVarmepumpe": 316.2,
+    "spartStrøm": 210.8,
+    "strømpris": 1.43,
+    "estimertSpartKostnad": 301.444
+  },
+  {
+    "måned": "April",
+    "oppvarming": 356,
+    "medVarmepumpe": 213.6,
+    "spartStrøm": 142.4,
+    "strømpris": 1.43,
+    "estimertSpartKostnad": 203.632
+  },
+  {
+    "måned": "Mai",
+    "oppvarming": 245,
+    "medVarmepumpe": 147.0,
+    "spartStrøm": 98.0,
+    "strømpris": 1.03,
+    "estimertSpartKostnad": 100.94
+  },
+  {
+    "måned": "Juni",
+    "oppvarming": 48,
+    "medVarmepumpe": 28.799999999999997,
+    "spartStrøm": 19.200000000000003,
+    "strømpris": 1.21,
+    "estimertSpartKostnad": 23.232000000000003
+  },
+  {
+    "måned": "Juli",
+    "oppvarming": 7,
+    "medVarmepumpe": 4.2,
+    "spartStrøm": 2.8,
+    "strømpris": 0.883,
+    "estimertSpartKostnad": 2.4724
+  },
+  {
+    "måned": "August",
+    "oppvarming": 18,
+    "medVarmepumpe": 10.799999999999999,
+    "spartStrøm": 7.200000000000001,
+    "strømpris": 0.938,
+    "estimertSpartKostnad": 6.7536000000000005
+  },
+  {
+    "måned": "September",
+    "oppvarming": 29,
+    "medVarmepumpe": 17.4,
+    "spartStrøm": 11.600000000000001,
+    "strømpris": 0.752,
+    "estimertSpartKostnad": 8.7232
+  },
+  {
+    "måned": "Oktober",
+    "oppvarming": 281,
+    "medVarmepumpe": 168.6,
+    "spartStrøm": 112.4,
+    "strømpris": 0.691,
+    "estimertSpartKostnad": 77.66839999999999
+  },
+  {
+    "måned": "November",
+    "oppvarming": 436,
+    "medVarmepumpe": 261.59999999999997,
+    "spartStrøm": 174.40000000000003,
+    "strømpris": 1.43,
+    "estimertSpartKostnad": 249.39200000000002
+  },
+  {
+    "måned": "Desember",
+    "oppvarming": 522,
+    "medVarmepumpe": 313.2,
+    "spartStrøm": 208.8,
+    "strømpris": 1.19,
+    "estimertSpartKostnad": 248.472
+  },
+  {
+    "måned": "Juli",
+    "oppvarming": 7,
+    "medVarmepumpe": 4.2,
+    "spartStrøm": 2.8,
+    "strømpris": 0.883,
+    "estimertSpartKostnad": 2.4724
+  },
+  {
+    "måned": "August",
+    "oppvarming": 18,
+    "medVarmepumpe": 10.799999999999999,
+    "spartStrøm": 7.200000000000001,
+    "strømpris": 0.938,
+    "estimertSpartKostnad": 6.7536000000000005
+  },
+  {
+    "måned": "September",
+    "oppvarming": 29,
+    "medVarmepumpe": 17.4,
+    "spartStrøm": 11.600000000000001,
+    "strømpris": 0.752,
+    "estimertSpartKostnad": 8.7232
+  },
+  {
+    "måned": "Oktober",
+    "oppvarming": 281,
+    "medVarmepumpe": 168.6,
+    "spartStrøm": 112.4,
+    "strømpris": 0.691,
+    "estimertSpartKostnad": 77.66839999999999
+  },
+  {
+    "måned": "November",
+    "oppvarming": 436,
+    "medVarmepumpe": 261.59999999999997,
+    "spartStrøm": 174.40000000000003,
+    "strømpris": 1.43,
+    "estimertSpartKostnad": 249.39200000000002
+  },
+  {
+    "måned": "Desember",
+    "oppvarming": 522,
+    "medVarmepumpe": 313.2,
+    "spartStrøm": 208.8,
+    "strømpris": 1.19,
+    "estimertSpartKostnad": 248.472
+  }
+]

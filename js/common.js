@@ -1,4 +1,5 @@
 // Globale variabler
+let data2023 = [];
 let data2024 = [];
 let data2025 = [];
 
@@ -11,8 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         showLoader(true);
         
         // Last inn data fra JSON-filer
-        try {
-            console.log("Common.js: Starter datahenting");
+        try {            console.log("Common.js: Starter datahenting");
+            data2023 = await fetchData('data/data2023.json');
+            console.log("Common.js: Data 2023 lastet, antall måneder:", data2023.length);
             data2024 = await fetchData('data/data2024.json');
             console.log("Common.js: Data 2024 lastet, antall måneder:", data2024.length);
             data2025 = await fetchData('data/data2025.json');

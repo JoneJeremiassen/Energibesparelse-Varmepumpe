@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energidata 2024 - Varmepumpe Besparelse</title>
+    <title>Energidata 2023 - Varmepumpe Besparelse</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,13 +12,15 @@
 </head>
 <body>
     <!-- Navigasjonsbar -->
-    <nav class="navbar">        <div class="nav-container">
+    <nav class="navbar">
+        <div class="nav-container">
             <div class="logo">
                 <a href="index.html"><i class="fas fa-bolt"></i> Energibesparelse</a>
-            </div>            <ul class="nav-links">
+            </div>
+            <ul class="nav-links">
                 <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Hjem</a></li>
-                <li class="nav-item"><a href="data2023.html"><i class="fas fa-calendar"></i> Energidata 2023</a></li>
-                <li class="nav-item active"><a href="data2024.html"><i class="fas fa-calendar"></i> Energidata 2024</a></li>
+                <li class="nav-item active"><a href="data2023.html"><i class="fas fa-calendar"></i> Energidata 2023</a></li>
+                <li class="nav-item"><a href="data2024.html"><i class="fas fa-calendar"></i> Energidata 2024</a></li>
                 <li class="nav-item"><a href="data2025.html"><i class="fas fa-calendar-alt"></i> Energidata 2025</a></li>
             </ul>
             <div class="hamburger">
@@ -31,8 +33,8 @@
     
     <div class="container">
         <header>
-            <h1>Energidata 2024</h1>
-            <p class="subtitle">Detaljert analyse av strømbesparelse for året 2024</p>
+            <h1>Energidata 2023</h1>
+            <p class="subtitle">Detaljert analyse av strømbesparelse for året 2023</p>
         </header>
         
         <div id="loader" class="loader"></div>
@@ -40,56 +42,53 @@
         <div id="error-message" class="error" style="display: none;"></div>
         
         <div id="content" style="display: none;">
-            <!-- Statistikk-kort for 2024 -->
+            <!-- Statistikk-kort for 2023 -->
             <section class="stats-container fade-in">
                 <div class="stat-card">
-                    <h3>Total oppvarming 2024</h3>
-                    <div id="total-oppvarming-2024" class="stat-value">0 kWh</div>
+                    <h3>Total oppvarming 2023</h3>
+                    <div id="total-oppvarming-2023" class="stat-value">0 kWh</div>
                     <p>Totalt strømforbruk til oppvarming</p>
                 </div>
-                
-                <div class="stat-card">
-                    <h3>Total besparelse 2024</h3>
-                    <div id="total-sparing-2024" class="stat-value positive">0 kWh</div>
+                  <div class="stat-card">
+                    <h3>Total besparelse 2023</h3>
+                    <div id="total-sparing-2023" class="stat-value positive">0 kWh</div>
                     <p>Total strømbesparelse med varmepumpe</p>
                 </div>
                 
                 <div class="stat-card">
-                    <h3>Besparelsesprosent 2024</h3>
-                    <div id="prosent-sparing-2024" class="stat-value positive">0%</div>
+                    <h3>Besparelsesprosent 2023</h3>
+                    <div id="prosent-sparing-2023" class="stat-value positive">0%</div>
                     <p>Prosent av strømforbruk spart</p>
                 </div>
                 
                 <div class="stat-card">
-                    <h3>Kostnadsbesparelse 2024</h3>
-                    <div id="total-kostnadsbesparelse-2024" class="stat-value positive">0 kr</div>
+                    <h3>Kostnadsbesparelse 2023</h3>
+                    <div id="total-kostnadsbesparelse-2023" class="stat-value positive">0 kr</div>
                     <p>Total økonomisk besparelse</p>
                 </div>
             </section>
             
-            <!-- Grafer for 2024 -->
-            <section class="charts fade-in">
-                <h2>Energiforbruk 2024</h2>
+            <!-- Grafer for 2023 -->            <section class="charts fade-in">
+                <h2>Energiforbruk 2023</h2>
                 
                 <div class="chart-container">
-                    <canvas id="energy-chart-2024" class="chart"></canvas>
+                    <canvas id="energy-chart-2023" class="chart"></canvas>
                 </div>
                 
                 <div class="chart-container">
-                    <canvas id="savings-chart-2024" class="chart"></canvas>
+                    <canvas id="savings-chart-2023" class="chart"></canvas>
                 </div>
                 
                 <div class="chart-container">
-                    <canvas id="price-chart-2024" class="chart"></canvas>
+                    <canvas id="price-chart-2023" class="chart"></canvas>
                 </div>
             </section>
             
-            <!-- Tabelldata for 2024 -->
+            <!-- Tabelldata for 2023 -->
             <section class="data-section fade-in">
-                <h2>Detaljert energidata 2024</h2>
+                <h2>Detaljert energidata 2023</h2>
                 
-                <div class="table-container">
-                    <table id="data-table-2024">
+                <div class="table-container">                    <table id="data-table-2023">
                         <thead>
                             <tr>
                                 <th>Måned</th>
@@ -101,21 +100,22 @@
                                 <th>Akkumulert besparelse (kr)</th>
                             </tr>
                         </thead>
-                        <tbody id="data-table-body-2024">
+                        <tbody id="data-table-body-2023">
                             <!-- Data fylles inn dynamisk fra JavaScript -->
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Sum 2024</th>
-                                <th id="sum-oppvarming-2024">0</th>
-                                <th id="sum-med-varmepumpe-2024">0</th>
-                                <th id="sum-spart-2024">0</th>
-                                <th id="avg-strompris-2024">0</th>
-                                <th id="sum-kostnad-spart-2024">0</th>
-                                <th id="total-akkumulert-2024">0</th>
+                                <th>Sum 2023</th>
+                                <th id="sum-oppvarming-2023">0</th>
+                                <th id="sum-med-varmepumpe-2023">0</th>
+                                <th id="sum-spart-2023">0</th>
+                                <th id="avg-strompris-2023">0</th>
+                                <th id="sum-kostnad-spart-2023">0</th>
+                                <th id="total-akkumulert-2023">0</th>
                             </tr>
                         </tfoot>
-                    </table>                </div>
+                    </table>
+                </div>
             </section>
         </div>
         
@@ -125,6 +125,6 @@
     </div>
     
     <script src="js/common.js"></script>
-    <script src="js/data2024.js"></script>
+    <script src="js/data2023.js"></script>
 </body>
 </html>
