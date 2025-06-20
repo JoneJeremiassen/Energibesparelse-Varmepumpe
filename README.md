@@ -2,7 +2,7 @@
 
 Et interaktivt webbasert verktøy for å visualisere energibesparelse ved bruk av varmepumpe over perioden 2023-2025. Dette prosjektet gir brukeren mulighet til å simulere ulike effektivitetsnivåer for varmepumper (COP - Coefficient of Performance) og se hvordan dette påvirker energiforbruk og kostnadsbesparelser. Alle data, grafer og statistikk oppdateres dynamisk når COP-verdien endres.
 
-![Energibesparelse Varmepumpe](https://example.com/screenshot.png) <!-- Erstatt med en faktisk skjermdump av applikasjonen -->
+![Energibesparelse Varmepumpe](https://i.imgur.com/jYlcTT2.png)
 
 ## Innhold
 
