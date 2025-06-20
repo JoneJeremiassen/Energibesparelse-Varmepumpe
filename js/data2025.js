@@ -46,6 +46,27 @@ function updateStatistics2025() {
 
 // Initialiserer grafer for 2025
 function initializeCharts2025() {
+    // Ødelegg eksisterende grafer først
+    let existingChart = Chart.getChart(document.getElementById('energy-chart-2025'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    existingChart = Chart.getChart(document.getElementById('savings-chart-2025'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    existingChart = Chart.getChart(document.getElementById('price-chart-2025'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    existingChart = Chart.getChart(document.getElementById('accumulated-chart-2025'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
     // Energiforbruksgraf
     const ctxEnergy = document.getElementById('energy-chart-2025').getContext('2d');
     new Chart(ctxEnergy, {

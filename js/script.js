@@ -1,14 +1,20 @@
 // Laster inn data ved oppstart
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        // Vis en lastemeldingsmelding
         showLoader(true);
+        document.getElementById('loader').setAttribute('aria-label', 'Laster energidata...');
+        
         // Vent til data er ferdig lastet
         const checkDataLoaded = async () => {
             // Vent på at dataene skal lastes inn hvis de ikke allerede er lastet
             if (data2023.length === 0 || data2024.length === 0 || data2025.length === 0) {
                 try {
+                    console.log('Starter lasting av data...');
+                    
                     if (data2023.length === 0) {
                         // Hent rådata
+                        console.log('Laster data for 2023...');
                         const rawData2023 = await fetchRawData('data/data2023.json');
                         
                         // Fjern eventuelle duplikate måneder (filtrer basert på unik måned)
@@ -24,14 +30,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                         
                         // Beregn dynamiske verdier basert på COP
                         data2023 = calculateDerivedValues(filteredData);
-                    }
-                    if (data2024.length === 0) {
+                        console.log("Ferdig med å laste data2023:", data2023.length, "måneder");
+                    }                    if (data2024.length === 0) {
+                        console.log('Laster data for 2024...');
                         const rawData2024 = await fetchRawData('data/data2024.json');
                         data2024 = calculateDerivedValues(rawData2024);
+                        console.log("Ferdig med å laste data2024:", data2024.length, "måneder");
                     }
                     if (data2025.length === 0) {
+                        console.log('Laster data for 2025...');
                         const rawData2025 = await fetchRawData('data/data2025.json');
                         data2025 = calculateDerivedValues(rawData2025);
+                        console.log("Ferdig med å laste data2025:", data2025.length, "måneder");
                     }
                 } catch (error) {
                     console.error("Feil ved datahenting:", error);
@@ -40,54 +50,74 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         };
         
-        await checkDataLoaded();
-        // Kontroller at data faktisk er lastet
-        if (data2023.length > 0 && data2024.length > 0 && data2025.length > 0) {
+        try {
+            await checkDataLoaded();
+            console.log('Alle data er lastet inn, fortsetter med oppdatering av UI...');
+        } catch (loadError) {
+            console.error('Feil ved lasting av data:', loadError);
+            document.getElementById('error-message').textContent = 
+                `Feil ved lasting av data: ${loadError.message}`;
+            document.getElementById('error-message').style.display = 'block';
+        }
+        
+        // Kontroller at data faktisk er lastet - tillater å vise data selv om ikke alle datasett er tilgjengelige
+        let missingData = [];
+        if (data2023.length === 0) missingData.push("2023");
+        if (data2024.length === 0) missingData.push("2024");
+        if (data2025.length === 0) missingData.push("2025");
+        
+        if (missingData.length > 0) {
+            console.warn(`Mangler data for år: ${missingData.join(", ")}`);
+            document.getElementById('error-message').textContent = 
+                `Merk: Kunne ikke laste inn data for ${missingData.join(", ")}. Viser tilgjengelige data.`;
+            document.getElementById('error-message').style.display = 'block';
+        }
+        
+        // Fortsett så lenge vi har noen data å vise
+        if (data2023.length > 0 || data2024.length > 0 || data2025.length > 0) {
             // Initialiser UI
             updateStatistics();
             initializeSummaryChart();
+            
+            // Skjul loader og vis innhold
+            showLoader(false);
         } else {
             console.error("Ingen data tilgjengelig etter lasting");
             document.getElementById('error-message').textContent = 
-                'Kunne ikke laste inn data. Vennligst prøv igjen senere.';
+                'Kunne ikke laste inn noen data. Vennligst prøv igjen senere.';
+            document.getElementById('error-message').style.display = 'block';
+            showLoader(false);
         }
-        
-        showLoader(false);
     } catch (error) {
         console.error('Feil ved oppstart:', error);
         document.getElementById('error-message').textContent = 
             'Kunne ikke laste inn data. Vennligst prøv igjen senere.';
+        document.getElementById('error-message').style.display = 'block';
         showLoader(false);
     }
 });
 
 // Oppdaterer statistikkene øverst på siden
 function updateStatistics() {
-    // Sikre at det er data å jobbe med
-    if (!data2023 || !data2024 || !data2025 || data2023.length === 0 || data2024.length === 0 || data2025.length === 0) {
+    // Sikre at det er noe data å jobbe med
+    const hasData2023 = data2023 && data2023.length > 0;
+    const hasData2024 = data2024 && data2024.length > 0;
+    const hasData2025 = data2025 && data2025.length > 0;
+    
+    if (!hasData2023 && !hasData2024 && !hasData2025) {
         console.error("Mangler data for statistikkoppdatering");
         return;
     }
     
     // Beregn statistikk for hvert år
-    const stats2023 = generateStatistics(data2023);
-    const stats2024 = generateStatistics(data2024);
-    const stats2025 = generateStatistics(data2025);
-    
-    // Legg til informasjon om nåværende COP-verdi
-    const statsInfo = document.querySelector('.stats-info');
-    if (statsInfo) {
-        statsInfo.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
-    } else {
-        // Opprett informasjonselement hvis det ikke finnes
-        const statsContainer = document.querySelector('.stats-container');
-        if (statsContainer) {
-            const infoElement = document.createElement('div');
-            infoElement.className = 'stats-info';
-            infoElement.innerHTML = `<p>Beregnet med varmepumpe COP: <strong>${varmepumpeCOP.toFixed(1)}</strong></p>`;
-            statsContainer.insertBefore(infoElement, statsContainer.firstChild);
-        }
-    }
+    const stats2023 = hasData2023 ? generateStatistics(data2023) : { 
+        totalOppvarming: 0, totalSpart: 0, totalKostnadSpart: 0, availableMonths: 0 
+    };
+    const stats2024 = hasData2024 ? generateStatistics(data2024) : { 
+        totalOppvarming: 0, totalSpart: 0, totalKostnadSpart: 0, availableMonths: 0 
+    };    const stats2025 = hasData2025 ? generateStatistics(data2025) : { 
+        totalOppvarming: 0, totalSpart: 0, totalKostnadSpart: 0, availableMonths: 0 
+    };
     
     // Kombiner statistikk for alle år
     const totalOppvarming = stats2023.totalOppvarming + stats2024.totalOppvarming + stats2025.totalOppvarming;
@@ -128,10 +158,19 @@ function updateStatistics() {
 
 // Initialiserer sammendragsgrafen på forsiden
 function initializeSummaryChart() {
+    console.log('Initialiserer sammendragsgraf...');
+    
     const chartElement = document.getElementById('summary-chart');
     if (!chartElement) {
         console.error("Kunne ikke finne summary-chart elementet");
         return;
+    }
+    
+    // Hvis grafen allerede eksisterer, ødelegg den først
+    const existingChart = Chart.getChart(chartElement);
+    if (existingChart) {
+        console.log('Fjerner eksisterende sammendragsgraf før ny opprettes');
+        existingChart.destroy();
     }
     
     const ctx = chartElement.getContext('2d');
@@ -141,36 +180,84 @@ function initializeSummaryChart() {
     }
     
     // Sikre at det er data å jobbe med
-    if (!data2023 || !data2024 || !data2025 || data2023.length === 0 || data2024.length === 0 || data2025.length === 0) {
+    const hasData2023 = data2023 && data2023.length > 0;
+    const hasData2024 = data2024 && data2024.length > 0;
+    const hasData2025 = data2025 && data2025.length > 0;
+    
+    if (!hasData2023 && !hasData2024 && !hasData2025) {
         console.error("Mangler data for grafoppdatering");
         return;
     }
     
     // Beregn månedlige besparelser for hvert år
-    const savings2023 = data2023.map(m => m.estimertSpartKostnad);
-    const savings2024 = data2024.map(m => m.estimertSpartKostnad);
-    const savings2025 = data2025.map(m => m.estimertSpartKostnad);
+    const savings2023 = hasData2023 ? data2023.map(m => m.estimertSpartKostnad || 0) : [];
+    const savings2024 = hasData2024 ? data2024.map(m => m.estimertSpartKostnad || 0) : [];
+    const savings2025 = hasData2025 ? data2025.map(m => m.estimertSpartKostnad || 0) : [];
     
     // Kombinere månedsnavn
     const allMonths = [
-        ...data2023.map(m => `${m.måned} 2023`), 
-        ...data2024.map(m => `${m.måned} 2024`), 
-        ...data2025.map(m => `${m.måned} 2025`)
+        ...(hasData2023 ? data2023.map(m => m.måned) : []), 
+        ...(hasData2024 ? data2024.map(m => m.måned) : []), 
+        ...(hasData2025 ? data2025.map(m => m.måned) : [])
     ];
     
-    // Kombinere data
-    const allSavings = [...savings2023, ...savings2024, ...savings2025];
+    // Kombinere data i kronologisk rekkefølge
+    // Opprett en array med alle år+måneder for sortering
+    const combinedData = [];
     
-    // Filtering out null values while preserving structure
-    const labels = [];
-    const savingsData = [];
+    if (hasData2023) {
+        data2023.forEach((month, index) => {
+            // Hent år fra månedsnavn (f.eks. "Januar 2023" -> "2023")
+            const år = month.måned.split(' ')[1] || '2023';
+            
+            combinedData.push({
+                måned: month.måned,
+                besparelse: savings2023[index],
+                år: parseInt(år),
+                sortKey: `${år}-${getMånedNummer(month.måned)}`
+            });
+        });
+    }
     
-    allMonths.forEach((month, index) => {
-        if (allSavings[index] !== null) {
-            labels.push(month);
-            savingsData.push(allSavings[index]);
-        }
-    });
+    if (hasData2024) {
+        data2024.forEach((month, index) => {
+            const år = month.måned.split(' ')[1] || '2024';
+            
+            combinedData.push({
+                måned: month.måned,
+                besparelse: savings2024[index],
+                år: parseInt(år),
+                sortKey: `${år}-${getMånedNummer(month.måned)}`
+            });
+        });
+    }
+    
+    if (hasData2025) {
+        data2025.forEach((month, index) => {
+            const år = month.måned.split(' ')[1] || '2025';
+            
+            combinedData.push({
+                måned: month.måned,
+                besparelse: savings2025[index],
+                år: parseInt(år),
+                sortKey: `${år}-${getMånedNummer(month.måned)}`
+            });
+        });
+    }
+    
+    console.log('Data før sortering:', combinedData.map(d => d.måned));
+    
+    // Sorter dataene etter år og måned
+    combinedData.sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+    
+    console.log('Data etter sortering:', combinedData.map(d => d.måned));
+    
+    // Filtrer ut null-verdier
+    const filteredData = combinedData.filter(item => item.besparelse !== null);
+    
+    // Opprett arrays for diagram
+    const labels = filteredData.map(item => item.måned);
+    const savingsData = filteredData.map(item => item.besparelse);
     
     // Calculate accumulated savings
     const accumulatedSavings = [];
@@ -255,61 +342,13 @@ function initializeSummaryChart() {
                         }
                     }
                 }
-            }
+            }        
         }
     });
 }
 
-// Formaterer verdier for visning
-function formatValue(value, unit = '') {
-    if (value === null || value === undefined || value === '') {
-        return '<span class="empty-cell">Ikke tilgjengelig</span>';
-    }
-    
-    const formattedValue = typeof value === 'number' 
-        ? value.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-        : value;
-    
-    return unit ? `${formattedValue} ${unit}` : formattedValue;
-}
+// NB: Bruker formatValue fra common.js - ikke dupliser funksjonen her
 
-// Hjelpefunksjon for å generere statistikk for et bestemt år
-function generateStatistics(data) {
-    let totalOppvarming = 0;
-    let totalMedVarmepumpe = 0;
-    let totalSpart = 0;
-    let totalKostnadSpart = 0;
-    let availableMonths = 0;
-    
-    data.forEach(month => {
-        if (month.oppvarming !== null) {
-            totalOppvarming += month.oppvarming;
-            totalMedVarmepumpe += month.medVarmepumpe;
-            totalSpart += month.spartStrøm;
-            totalKostnadSpart += month.estimertSpartKostnad;
-            availableMonths++;
-        }
-    });
-    
-    return {
-        totalOppvarming,
-        totalMedVarmepumpe,
-        totalSpart,
-        totalKostnadSpart,
-        availableMonths
-    };
-}
+// NB: Bruker generateStatistics fra common.js - ikke dupliser funksjonen her
 
-// Viser eller skjuler lasteskjerm
-function showLoader(show) {
-    const loader = document.getElementById('loader');
-    const content = document.getElementById('content');
-    
-    if (show) {
-        loader.style.display = 'block';
-        content.style.display = 'none';
-    } else {
-        loader.style.display = 'none';
-        content.style.display = 'block';
-    }
-}
+// NB: Bruker showLoader fra common.js - ikke dupliser funksjonen her

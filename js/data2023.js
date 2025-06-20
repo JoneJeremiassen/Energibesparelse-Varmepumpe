@@ -72,6 +72,29 @@ function updateStatistics2023() {
 function initializeCharts2023() {
     // Energiforbruksgraf
     const ctxEnergy = document.getElementById('energy-chart-2023').getContext('2d');
+    
+    // Ødelegg eksisterende grafer først
+    let existingChart = Chart.getChart(document.getElementById('energy-chart-2023'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    existingChart = Chart.getChart(document.getElementById('savings-chart-2023'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    existingChart = Chart.getChart(document.getElementById('price-chart-2023'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    existingChart = Chart.getChart(document.getElementById('accumulated-chart-2023'));
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    // Opprett energiforbruksgraf
     new Chart(ctxEnergy, {
         type: 'bar',
         data: {

@@ -5,6 +5,20 @@ let data2025 = [];
 let varmepumpeCOP = 5.0; // Standard COP-verdi
 let debounceTimer; // For å forhindre for mange oppdateringer ved COP-endring
 
+// Mapper for månedsnavn til numerisk verdi for sortering
+const månedTilNummer = {
+    'Januar': '01', 'Februar': '02', 'Mars': '03', 'April': '04',
+    'Mai': '05', 'Juni': '06', 'Juli': '07', 'August': '08',
+    'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
+};
+
+// Funksjon for å hente månedens numeriske verdi fra månedsnavn
+function getMånedNummer(månedNavn) {
+    // Fjern årstall fra månedsnavn (f.eks. "Januar 2023" -> "Januar")
+    const baseMåned = månedNavn.split(' ')[0];
+    return månedTilNummer[baseMåned] || '00';
+}
+
 // Laster inn data ved oppstart
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser navigasjon
@@ -78,18 +92,22 @@ function initNavigation() {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
-    });
-    
-    // Lukk menyen når et link klikkes
-    document.querySelectorAll('.nav-item').forEach(n => {
-        n.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
         });
-    });
+        
+        // Lukk menyen når et link klikkes
+        document.querySelectorAll('.nav-item').forEach(n => {
+            n.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    } else {
+        console.warn('Kunne ikke initialisere hamburger-meny - elementer mangler');
+    }
     
     // Initialiser temabytte-funksjonalitet
     initThemeSwitch();
@@ -161,15 +179,28 @@ function calculateAccumulatedSavings(data, monthIndex) {
 function showLoader(show) {
     const loader = document.getElementById('loader');
     const content = document.getElementById('content');
+    const errorMessage = document.getElementById('error-message');
     
     if (show) {
         if (loader) {
             loader.style.display = 'block';
             loader.setAttribute('aria-label', 'Laster data...');
+        } else {
+            console.warn('Kunne ikke vise loader - element mangler');
         }
-        if (content) content.style.display = 'none';
+        
+        if (content) {
+            content.style.display = 'none';
+        }
+        
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
     } else {
-        if (loader) loader.style.display = 'none';
+        if (loader) {
+            loader.style.display = 'none';
+        }
+        
         if (content) {
             content.style.display = 'block';
             
@@ -178,6 +209,8 @@ function showLoader(show) {
             setTimeout(() => {
                 content.classList.remove('fade-in-fast');
             }, 500);
+        } else {
+            console.warn('Kunne ikke vise innhold - element mangler');
         }
     }
 }
@@ -238,6 +271,9 @@ function initCOPControl() {
         const navContainer = document.querySelector('.nav-container');
         if (navContainer) {
             navContainer.appendChild(copContainer);
+        } else {
+            console.warn('Kunne ikke finne .nav-container for å legge til COP-kontrollen');
+            return; // Avslutt funksjonen hvis navContainer ikke finnes
         }
     }
     
@@ -256,7 +292,8 @@ function initCOPControl() {
     const copSlider = document.getElementById('cop-slider');
     const copValue = document.getElementById('cop-value');
     const resetCOP = document.getElementById('reset-cop');
-      if (copSlider && copValue) {
+
+    if (copSlider && copValue) {
         copSlider.addEventListener('input', (e) => {
             const newCOP = parseFloat(e.target.value);
             varmepumpeCOP = newCOP;
@@ -301,33 +338,70 @@ async function recalculateData() {
         showLoader(true);
         
         // Last inn dataene på nytt fra JSON
-        const rawData2023 = await fetchRawData('data/data2023.json');
-        const rawData2024 = await fetchRawData('data/data2024.json');
-        const rawData2025 = await fetchRawData('data/data2025.json');
+        let rawData2023, rawData2024, rawData2025;
         
-        // Beregn nye verdier basert på oppdatert COP
-        data2023 = calculateDerivedValues(rawData2023);
-        data2024 = calculateDerivedValues(rawData2024);
-        data2025 = calculateDerivedValues(rawData2025);
+        try {
+            rawData2023 = await fetchRawData('data/data2023.json');
+            data2023 = calculateDerivedValues(rawData2023);
+            console.log("Data 2023 rekalkukert med ny COP:", varmepumpeCOP);
+        } catch (error) {
+            console.error('Feil ved rekalkukering av 2023-data:', error);
+        }
+        
+        try {
+            rawData2024 = await fetchRawData('data/data2024.json');
+            data2024 = calculateDerivedValues(rawData2024);
+            console.log("Data 2024 rekalkukert med ny COP:", varmepumpeCOP);
+        } catch (error) {
+            console.error('Feil ved rekalkukering av 2024-data:', error);
+        }
+        
+        try {
+            rawData2025 = await fetchRawData('data/data2025.json');
+            data2025 = calculateDerivedValues(rawData2025);
+            console.log("Data 2025 rekalkukert med ny COP:", varmepumpeCOP);
+        } catch (error) {
+            console.error('Feil ved rekalkukering av 2025-data:', error);
+        }
         
         // Oppdater UI avhengig av hvilken side vi er på
         const path = window.location.pathname;
         
-        if (path.includes('data2023.html')) {
-            updateStatistics2023();
-            initializeCharts2023();
-            populateTable2023();
-        } else if (path.includes('data2024.html')) {
-            updateStatistics2024();
-            initializeCharts2024();
-            populateTable2024();
-        } else if (path.includes('data2025.html')) {
-            updateStatistics2025();
-            initializeCharts2025();
-            populateTable2025();
-        } else if (path.includes('index.html') || path.endsWith('/')) {
-            updateStatistics();
-            initializeSummaryChart();
+        try {
+            // Oppdater spesifikke sider
+            if (path.includes('data2023.html')) {
+                if (typeof updateStatistics2023 === 'function') updateStatistics2023();
+                if (typeof initializeCharts2023 === 'function') initializeCharts2023();
+                if (typeof populateTable2023 === 'function') populateTable2023();
+            } else if (path.includes('data2024.html')) {
+                if (typeof updateStatistics2024 === 'function') updateStatistics2024();
+                if (typeof initializeCharts2024 === 'function') initializeCharts2024();
+                if (typeof populateTable2024 === 'function') populateTable2024();
+            } else if (path.includes('data2025.html')) {
+                if (typeof updateStatistics2025 === 'function') updateStatistics2025();
+                if (typeof initializeCharts2025 === 'function') initializeCharts2025();
+                if (typeof populateTable2025 === 'function') populateTable2025();
+            } else if (path.includes('index.html') || path.endsWith('/') || path.endsWith('\\')) {
+                if (typeof updateStatistics === 'function') updateStatistics();
+                if (typeof initializeSummaryChart === 'function') {
+                    // Fjern den eksisterende chart først for å unngå duplisering
+                    const chartElement = document.getElementById('summary-chart');
+                    if (chartElement) {
+                        const existingChart = Chart.getChart(chartElement);
+                        if (existingChart) {
+                            existingChart.destroy();
+                        }
+                        initializeSummaryChart();
+                    }
+                }
+            }
+            
+            // Oppdater alle grafer ved å trigge en window resize event - dette får chart.js til å re-render
+            window.dispatchEvent(new Event('resize'));
+            
+            console.log("UI er oppdatert med ny COP-verdi:", varmepumpeCOP);
+        } catch (uiError) {
+            console.error('Feil ved oppdatering av UI etter rekalkukering:', uiError);
         }
         
         showLoader(false);
@@ -344,7 +418,27 @@ async function fetchRawData(url) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return await response.json();
+        const data = await response.json();
+        
+        // Valider at data er et array
+        if (!Array.isArray(data)) {
+            throw new Error(`Ugyldig dataformat fra ${url}: Forventet array, fikk ${typeof data}`);
+        }
+        
+        // Valider at hvert element har nødvendige egenskaper
+        for (const item of data) {
+            if (!item.hasOwnProperty('måned')) {
+                console.warn(`Element mangler 'måned'-egenskap i ${url}`);
+            }
+            if (!item.hasOwnProperty('oppvarming')) {
+                console.warn(`Element mangler 'oppvarming'-egenskap i ${url}`);
+            }
+            if (!item.hasOwnProperty('strømpris')) {
+                console.warn(`Element mangler 'strømpris'-egenskap i ${url}`);
+            }
+        }
+        
+        return data;
     } catch (error) {
         console.error('Feil ved henting av rådata:', error);
         throw error;
@@ -353,25 +447,54 @@ async function fetchRawData(url) {
 
 // Beregner dynamiske verdier basert på COP
 function calculateDerivedValues(data) {
-    return data.map(month => {
-        if (month.oppvarming === null || month.strømpris === null) {
+    if (!Array.isArray(data)) {
+        console.error('Ugyldig data sendt til calculateDerivedValues: Forventet array');
+        return [];
+    }
+    
+    try {
+        return data.map(month => {
+            if (!month || typeof month !== 'object') {
+                console.warn('Ugyldig månedsobjekt funnet i data');
+                return {
+                    måned: 'Ukjent',
+                    oppvarming: null,
+                    strømpris: null,
+                    medVarmepumpe: null,
+                    spartStrøm: null,
+                    estimertSpartKostnad: null
+                };
+            }
+            
+            if (month.oppvarming === null || month.oppvarming === undefined || 
+                month.strømpris === null || month.strømpris === undefined) {
+                return {
+                    ...month,
+                    medVarmepumpe: null,
+                    spartStrøm: null,
+                    estimertSpartKostnad: null
+                };
+            }
+            
+            // Sjekk at vi ikke får negative verdier eller div by zero
+            if (varmepumpeCOP <= 0) {
+                console.warn('Ugyldig COP-verdi (≤ 0) - bruker standardverdi 5.0');
+                varmepumpeCOP = 5.0;
+            }
+            
+            const medVarmepumpe = month.oppvarming / varmepumpeCOP;
+            const spartStrøm = month.oppvarming - medVarmepumpe;
+            const estimertSpartKostnad = spartStrøm * month.strømpris;
+            
             return {
                 ...month,
-                medVarmepumpe: null,
-                spartStrøm: null,
-                estimertSpartKostnad: null
+                medVarmepumpe,
+                spartStrøm,
+                estimertSpartKostnad
             };
-        }
-        
-        const medVarmepumpe = month.oppvarming / varmepumpeCOP;
-        const spartStrøm = month.oppvarming - medVarmepumpe;
-        const estimertSpartKostnad = spartStrøm * month.strømpris;
-        
-        return {
-            ...month,
-            medVarmepumpe,
-            spartStrøm,
-            estimertSpartKostnad
-        };
-    });
+        });
+    } catch (error) {
+        console.error('Feil ved beregning av dynamiske verdier:', error);
+        return [];
+    }
 }

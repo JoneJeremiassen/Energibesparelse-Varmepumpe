@@ -364,15 +364,7 @@ tbody tr:hover {
   font-size: 0.9em;
 }
 
-/* Stats Info Styles */
-.stats-info {
-    text-align: center;
-    margin: 10px 0;
-    padding: 5px;
-    background-color: var(--light-nav-active);
-    color: white;
-    border-radius: 5px;
-}
+/* Stats Info Styles har blitt fjernet, ettersom COP-boksen ikke lenger vises på forsiden */
 
 .table-info {
     text-align: center;
