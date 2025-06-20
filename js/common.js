@@ -275,16 +275,27 @@ function initCOPControl() {
             console.warn('Kunne ikke finne .nav-container for å legge til COP-kontrollen');
             return; // Avslutt funksjonen hvis navContainer ikke finnes
         }
-    }
-    
-    // Opprett innholdet i COP-kontrolleren
+    }    // Opprett innholdet i COP-kontrolleren
     copContainer.innerHTML = `
         <div class="cop-control">
-            <label for="cop-slider">Varmepumpe COP: <span id="cop-value">${varmepumpeCOP.toFixed(1)}</span></label>
-            <input type="range" id="cop-slider" min="1" max="10" step="0.1" value="${varmepumpeCOP}">
-            <button id="reset-cop" title="Tilbakestill til standard verdi (5.0)">
-                <i class="fas fa-undo"></i>
-            </button>
+            <div class="cop-header">
+                <label for="cop-slider">COP: <span id="cop-value">${varmepumpeCOP.toFixed(1)}</span></label>
+                <div class="cop-control-buttons">                    <button id="reset-cop" title="Tilbakestill til standard verdi (5.0)">
+                        <i class="fas fa-undo"></i>
+                    </button>                    <div class="cop-info-tooltip">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="tooltip-text">COP (Coefficient of Performance) angir hvor effektiv varmepumpen er. Typiske verdier: 1-2 = lav, 3-4 = middels, 5-6 = høy effektivitet.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="cop-slider" min="1" max="6" step="0.1" value="${varmepumpeCOP}">
+                <div class="slider-labels">
+                    <span>1.0</span>
+                    <span>3.0</span>
+                    <span>6.0</span>
+                </div>
+            </div>
         </div>
     `;
     
@@ -292,6 +303,24 @@ function initCOPControl() {
     const copSlider = document.getElementById('cop-slider');
     const copValue = document.getElementById('cop-value');
     const resetCOP = document.getElementById('reset-cop');
+    const infoIcon = document.querySelector('.cop-info-tooltip i');    // Sørg for at informasjonsikonet fungerer med både hover og klikk (for mobile enheter)
+    if (infoIcon) {
+        infoIcon.addEventListener('click', (e) => {
+            const tooltipContainer = e.currentTarget.closest('.cop-info-tooltip');
+            tooltipContainer.classList.toggle('active');
+            e.stopPropagation();
+        });
+        
+        // Lukk tooltip når man klikker hvor som helst ellers på siden
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.cop-info-tooltip')) {
+                const tooltipContainers = document.querySelectorAll('.cop-info-tooltip');
+                tooltipContainers.forEach(container => {
+                    container.classList.remove('active');
+                });
+            }
+        });
+    }
 
     if (copSlider && copValue) {
         copSlider.addEventListener('input', (e) => {
@@ -312,8 +341,7 @@ function initCOPControl() {
                 copValue.textContent = newCOP.toFixed(1);
             }, 300);
         });
-    }
-      if (resetCOP) {
+    }    if (resetCOP) {
         resetCOP.addEventListener('click', () => {
             varmepumpeCOP = 5.0;
             if (copSlider) copSlider.value = "5.0";
@@ -321,15 +349,13 @@ function initCOPControl() {
                 copValue.innerHTML = `<span class="cop-updating">5.0</span>`;
             }
             localStorage.setItem('varmepumpeCOP', "5.0");
-            
-            // Vis loading indikator og oppdater data
+              // Vis loading indikator og oppdater data
             setTimeout(async () => {
                 // Oppdater dataene med ny COP-verdi
                 await recalculateData();
                 if (copValue) copValue.textContent = "5.0";
             }, 10);
-        });
-    }
+        });    }
 }
 
 // Oppdaterer alle data med ny COP-verdi
@@ -473,8 +499,7 @@ function calculateDerivedValues(data) {
                     medVarmepumpe: null,
                     spartStrøm: null,
                     estimertSpartKostnad: null
-                };
-            }
+                };            }
             
             // Sjekk at vi ikke får negative verdier eller div by zero
             if (varmepumpeCOP <= 0) {
