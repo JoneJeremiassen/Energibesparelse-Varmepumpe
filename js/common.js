@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialiser navigasjon
     initNavigation();
     
+    // Initialiser responsivitet
+    handleResponsiveness();
+    
     try {
         showLoader(true);
         
@@ -87,6 +90,13 @@ async function fetchData(url) {
     }
 }
 
+// Cache for rådata fra JSON-filer
+const rawDataCache = {
+    'data/data2023.json': null,
+    'data/data2024.json': null,
+    'data/data2025.json': null
+};
+
 // Initialiserer navigasjonsbar
 function initNavigation() {
     const hamburger = document.querySelector('.hamburger');
@@ -108,12 +118,42 @@ function initNavigation() {
     } else {
         console.warn('Kunne ikke initialisere hamburger-meny - elementer mangler');
     }
-    
-    // Initialiser temabytte-funksjonalitet
+      // Initialiser temabytte-funksjonalitet
     initThemeSwitch();
+    
+    // Markér aktiv navigasjonslink
+    updateActiveNavigation();
     
     // Initialiser COP-kontroller
     initCOPControl();
+    
+    // Oppdater aktiv navigasjonslenke
+    updateActiveNavigation();
+}
+
+// Setter aktiv klasse på navigasjonslenker basert på gjeldende side
+function updateActiveNavigation() {
+    const path = window.location.pathname;
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    navItems.forEach(item => {
+        const link = item.querySelector('a');
+        if (!link) return;
+        
+        // Fjern aktiv klasse
+        item.classList.remove('active');
+        
+        // Sjekk om denne lenken matcher gjeldende side
+        if ((path.includes('index.html') || path.endsWith('/') || path.endsWith('\\')) && link.href.includes('index.html')) {
+            item.classList.add('active');
+        } else if (path.includes('data2023.html') && link.href.includes('data2023.html')) {
+            item.classList.add('active');
+        } else if (path.includes('data2024.html') && link.href.includes('data2024.html')) {
+            item.classList.add('active');
+        } else if (path.includes('data2025.html') && link.href.includes('data2025.html')) {
+            item.classList.add('active');
+        }
+    });
 }
 
 // Funksjon for å håndtere temabytte (dark/light mode)
@@ -439,6 +479,12 @@ async function recalculateData() {
 
 // Henter rådata fra JSON-filer uten å beregne dynamiske verdier
 async function fetchRawData(url) {
+    // Sjekk om data allerede er i cache
+    if (rawDataCache[url]) {
+        console.log(`Bruker cache for ${url}`);
+        return rawDataCache[url];
+    }
+    
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -463,6 +509,9 @@ async function fetchRawData(url) {
                 console.warn(`Element mangler 'strømpris'-egenskap i ${url}`);
             }
         }
+        
+        // Lagre i cache
+        rawDataCache[url] = data;
         
         return data;
     } catch (error) {
@@ -492,14 +541,14 @@ function calculateDerivedValues(data) {
                 };
             }
             
-            if (month.oppvarming === null || month.oppvarming === undefined || 
-                month.strømpris === null || month.strømpris === undefined) {
+            if (month.oppvarming === null || month.oppvarming === undefined ||                month.strømpris === null || month.strømpris === undefined) {
                 return {
                     ...month,
                     medVarmepumpe: null,
                     spartStrøm: null,
                     estimertSpartKostnad: null
-                };            }
+                };
+            }
             
             // Sjekk at vi ikke får negative verdier eller div by zero
             if (varmepumpeCOP <= 0) {
@@ -523,3 +572,23 @@ function calculateDerivedValues(data) {
         return [];
     }
 }
+
+// Funksjon for å håndtere responsivitet og grafer på mobile enheter
+function handleResponsiveness() {
+    const isMobile = window.innerWidth < 768;
+    
+    // Justering av graf-alternativer basert på skjermstørrelse
+    if (typeof Chart !== 'undefined') {
+        Chart.defaults.font.size = isMobile ? 10 : 12;
+        Chart.defaults.plugins.legend.labels.boxWidth = isMobile ? 10 : 15;
+        Chart.defaults.plugins.legend.position = isMobile ? 'bottom' : 'top';
+    }
+    
+    // Eventuelle andre responsivitetsendringer kan legges inn her
+    
+    // Re-render alle grafer
+    window.dispatchEvent(new Event('resize'));
+}
+
+// Legg til lytter for vindusstørrelseendringer
+window.addEventListener('resize', handleResponsiveness);
