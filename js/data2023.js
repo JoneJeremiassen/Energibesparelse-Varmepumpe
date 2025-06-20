@@ -3,6 +3,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         showLoader(true);
         
+        // Sett innholdet til å være synlig men med loading-tilstand
+        const content = document.getElementById('content');
+        if (content) {
+            // Fjern inline stil først
+            content.style.removeProperty('display');
+            content.classList.add('content-loading');
+        }
+        
         // Vent til data er ferdig lastet
         if (data2023.length === 0) {
             try {

@@ -230,7 +230,11 @@ function showLoader(show) {
         }
         
         if (content) {
-            content.style.display = 'none';
+            // Fjern display: none inline-stil og legg til loading-klasse i stedet
+            if (content.style.display === 'none') {
+                content.style.removeProperty('display'); // Fjern inline style
+            }
+            content.classList.add('content-loading');
         }
         
         if (errorMessage) {
@@ -242,7 +246,9 @@ function showLoader(show) {
         }
         
         if (content) {
+            // Vis innholdet og fjern loading-klassen
             content.style.display = 'block';
+            content.classList.remove('content-loading');
             
             // Legg til fade-in effekt når innholdet vises på nytt
             content.classList.add('fade-in-fast');
@@ -363,14 +369,16 @@ function initCOPControl() {
     }
 
     if (copSlider && copValue) {
-        copSlider.addEventListener('input', (e) => {
-            const newCOP = parseFloat(e.target.value);
+        copSlider.addEventListener('input', (e) => {            const newCOP = parseFloat(e.target.value);
             varmepumpeCOP = newCOP;
             copValue.textContent = newCOP.toFixed(1);
             localStorage.setItem('varmepumpeCOP', newCOP.toString());
             
             // Vis en mini-loader ved COP-verdien
             copValue.innerHTML = `<span class="cop-updating">${newCOP.toFixed(1)}</span>`;
+            
+            // Lagre nåværende scroll-posisjon
+            const scrollPosition = window.scrollY || document.documentElement.scrollTop;
             
             // Debounce - venter med å oppdatere til slideren stopper
             clearTimeout(debounceTimer);
@@ -379,27 +387,45 @@ function initCOPControl() {
                 await recalculateData();
                 // Oppdater COP-visningen når dataene er klare
                 copValue.textContent = newCOP.toFixed(1);
+                
+                // Gjenopprett scroll-posisjon etter oppdatering
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'auto' // 'auto' istedenfor 'smooth' for å unngå synlig bevegelse
+                });
             }, 300);
         });
-    }    if (resetCOP) {
-        resetCOP.addEventListener('click', () => {
+    }    if (resetCOP) {        resetCOP.addEventListener('click', () => {
             varmepumpeCOP = 5.0;
             if (copSlider) copSlider.value = "5.0";
             if (copValue) {
                 copValue.innerHTML = `<span class="cop-updating">5.0</span>`;
             }
             localStorage.setItem('varmepumpeCOP', "5.0");
-              // Vis loading indikator og oppdater data
+            
+            // Lagre nåværende scroll-posisjon
+            const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            
+            // Vis loading indikator og oppdater data
             setTimeout(async () => {
                 // Oppdater dataene med ny COP-verdi
                 await recalculateData();
                 if (copValue) copValue.textContent = "5.0";
+                
+                // Gjenopprett scroll-posisjon etter oppdatering
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'auto'
+                });
             }, 10);
         });    }
 }
 
 // Oppdaterer alle data med ny COP-verdi
 async function recalculateData() {
+    // Lagre nåværende scroll-posisjon
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    
     try {
         showLoader(true);
         
@@ -467,13 +493,24 @@ async function recalculateData() {
             
             console.log("UI er oppdatert med ny COP-verdi:", varmepumpeCOP);
         } catch (uiError) {
-            console.error('Feil ved oppdatering av UI etter rekalkukering:', uiError);
-        }
+            console.error('Feil ved oppdatering av UI etter rekalkukering:', uiError);        }
         
         showLoader(false);
+        
+        // Gjenopprett scroll-posisjon etter oppdatering
+        window.scrollTo({
+            top: scrollPosition,
+            behavior: 'auto'
+        });
     } catch (error) {
         console.error('Feil ved oppdatering av data:', error);
         showLoader(false);
+        
+        // Fortsatt gjenopprett scroll-posisjon selv om det oppstod en feil
+        window.scrollTo({
+            top: scrollPosition,
+            behavior: 'auto'
+        });
     }
 }
 

@@ -1074,3 +1074,25 @@ input:checked + .slider:before {
         opacity: 1;
     }
 }
+
+/* Loading state for content that preserves position */
+.content-loading {
+    position: relative;
+    pointer-events: none; /* Disable interactions while loading */
+    opacity: 0.7; /* Dim the content slightly */
+    min-height: 200px; /* Ensure minimum height so it's visible */
+    display: block !important; /* Ensure content remains visible regardless of inline styles */
+}
+
+.content-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.05); /* Slight overlay */
+    z-index: 10; /* Above content but below loader */
+}
+
+/* Standard loading spinner */

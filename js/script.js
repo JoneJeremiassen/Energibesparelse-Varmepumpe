@@ -3,6 +3,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Vis en lastemeldingsmelding
         showLoader(true);
+        
+        // Sett innholdet til å være synlig men med loading-tilstand
+        const content = document.getElementById('content');
+        if (content) {
+            // Fjern inline stil først
+            content.style.removeProperty('display');
+            content.classList.add('content-loading');
+        }
+        
         document.getElementById('loader').setAttribute('aria-label', 'Laster energidata...');
         
         // Vent til data er ferdig lastet
@@ -74,8 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         // Fortsett så lenge vi har noen data å vise
-        if (data2023.length > 0 || data2024.length > 0 || data2025.length > 0) {
-            // Initialiser UI
+        if (data2023.length > 0 || data2024.length > 0 || data2025.length > 0) {            // Initialiser UI
             updateStatistics();
             initializeSummaryChart();
             
