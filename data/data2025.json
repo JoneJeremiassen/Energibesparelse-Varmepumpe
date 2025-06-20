@@ -1,58 +1,61 @@
 [
   {
-    "måned": "Januar",
+    "måned": "Januar 2025",
     "oppvarming": 596,
     "strømpris": 1.07
   },
   {
-    "måned": "Februar",
+    "måned": "Februar 2025",
     "oppvarming": 519,
     "strømpris": 1.38
-  },  {
-    "måned": "Mars",
+  },
+  {
+    "måned": "Mars 2025",
     "oppvarming": 440,
     "strømpris": 0.763
   },
   {
-    "måned": "April",
+    "måned": "April 2025",
     "oppvarming": 270,
     "strømpris": 0.847
-  },  {
-    "måned": "Mai",
+  },
+  {
+    "måned": "Mai 2025",
     "oppvarming": 145,
     "strømpris": 0.977
   },
   {
-    "måned": "Juni",
+    "måned": "Juni 2025",
     "oppvarming": 38,
     "strømpris": 0.842
-  },  {
-    "måned": "Juli",
+  },
+  {
+    "måned": "Juli 2025",
     "oppvarming": null,
     "strømpris": null
   },
   {
-    "måned": "August",
+    "måned": "August 2025",
     "oppvarming": null,
     "strømpris": null
   },
   {
-    "måned": "September",
+    "måned": "September 2025",
     "oppvarming": null,
     "strømpris": null
   },
   {
-    "måned": "Oktober",
+    "måned": "Oktober 2025",
     "oppvarming": null,
     "strømpris": null
   },
   {
-    "måned": "November",
+    "måned": "November 2025",
     "oppvarming": null,
     "strømpris": null
   },
   {
-    "måned": "Desember",
+    "måned": "Desember 2025",
     "oppvarming": null,
     "strømpris": null
   }

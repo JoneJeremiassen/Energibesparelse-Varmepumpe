@@ -1,57 +1,62 @@
 [
   {
     "måned": "Januar 2024",
-    "oppvarming": 1234.56,
-    "strømpris": 1.43
+    "oppvarming": 589,
+    "strømpris": 1.16
   },
   {
     "måned": "Februar 2024",
-    "oppvarming": 1175.32,
-    "strømpris": 1.21
-  },  {
+    "oppvarming": 470,
+    "strømpris": 0.873
+  },
+  {
     "måned": "Mars 2024",
-    "oppvarming": 1045.67,
-    "strømpris": 1.08
+    "oppvarming": 410,
+    "strømpris": 0.857
   },
   {
     "måned": "April 2024",
-    "oppvarming": 854.32,
-    "strømpris": 0.95
-  },  {
+    "oppvarming": 356,
+    "strømpris": 0.806
+  },
+  {
     "måned": "Mai 2024",
-    "oppvarming": 546.78,
-    "strømpris": 0.87
+    "oppvarming": 45,
+    "strømpris": 0.642
   },
   {
     "måned": "Juni 2024",
-    "oppvarming": 321.54,
-    "strømpris": 0.92
-  },  {
+    "oppvarming": 41,
+    "strømpris": 0.633
+  },
+  {
     "måned": "Juli 2024",
-    "oppvarming": 243.21,
-    "strømpris": 0.97
+    "oppvarming": 12,
+    "strømpris": 0.558
   },
   {
     "måned": "August 2024",
-    "oppvarming": 287.65,
-    "strømpris": 1.03
-  },  {
+    "oppvarming": 6,
+    "strømpris": 0.608
+  },
+  {
     "måned": "September 2024",
-    "oppvarming": 435.87,
-    "strømpris": 1.12
+    "oppvarming": 85,
+    "strømpris": 0.596
   },
   {
     "måned": "Oktober 2024",
-    "oppvarming": 678.42,
-    "strømpris": 1.18
-  },  {
+    "oppvarming": 225,
+    "strømpris": 0.650
+  },
+  {
     "måned": "November 2024",
-    "oppvarming": 876.54,
-    "strømpris": 1.27
+    "oppvarming": 403,
+    "strømpris": 0.910
   },
   {
     "måned": "Desember 2024",
-    "oppvarming": 1132.87,
-    "strømpris": 1.35
+    "oppvarming": 491,
+    "strømpris": 0.994
   }
 ]
