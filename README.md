@@ -69,7 +69,7 @@ Denne løsningen krever ingen spesiell installasjon. Siden den er bygget med ren
 
 1. **Klone eller laste ned repoet**:
    ```bash
-   git clone https://github.com/ditt-brukernavn/Energibesparelse-Varmepumpe.git
+   git clone https://github.com/JoneJeremiassen/Energibesparelse-Varmepumpe.git
    ```
 
 2. **Åpne i en nettleser**:
