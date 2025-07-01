@@ -1357,7 +1357,7 @@ input:checked + .slider:before {
 }
 
 .comparison-table td a::before {
-    content: "\f02d"; /* Font Awesome ikon for brosjyre/produktark */
+    content: "\f05a"; /* Font Awesome info-circle ikon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     margin-right: 8px;
