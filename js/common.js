@@ -118,17 +118,15 @@ function initNavigation() {
     } else {
         console.warn('Kunne ikke initialisere hamburger-meny - elementer mangler');
     }
-      // Initialiser temabytte-funksjonalitet
+    
+    // Initialiser temabytte-funksjonalitet FØRST
     initThemeSwitch();
     
     // Markér aktiv navigasjonslink
     updateActiveNavigation();
     
-    // Initialiser COP-kontroller
+    // Initialiser COP-kontroller ETTER temabytte
     initCOPControl();
-    
-    // Oppdater aktiv navigasjonslenke
-    updateActiveNavigation();
 }
 
 // Setter aktiv klasse på navigasjonslenker basert på gjeldende side
@@ -313,8 +311,13 @@ function initCOPControl() {
         copContainer = document.createElement('div');
         copContainer.className = 'cop-control-container';
         
+        // Plassering: Vi flytter COP-slideren FØR theme-switch-wrapper
         const navContainer = document.querySelector('.nav-container');
-        if (navContainer) {
+        const themeSwitch = document.querySelector('.theme-switch-wrapper');
+        
+        if (navContainer && themeSwitch) {
+            navContainer.insertBefore(copContainer, themeSwitch);
+        } else if (navContainer) {
             navContainer.appendChild(copContainer);
         } else {
             console.warn('Kunne ikke finne .nav-container for å legge til COP-kontrollen');

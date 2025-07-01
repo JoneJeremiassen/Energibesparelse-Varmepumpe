@@ -844,7 +844,7 @@ input:checked + .slider:before {
 .cop-control-container {
     display: flex;
     align-items: center;
-    margin-left: 10px;
+    margin-right: 10px; /* Endret fra margin-left til margin-right */
 }
 
 .cop-control {
