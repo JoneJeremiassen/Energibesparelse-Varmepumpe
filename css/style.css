@@ -479,7 +479,7 @@ tbody tr:hover {
   100% { transform: rotate(360deg); }
 }
 
-/* Mini-loader for COP updates */
+/* Mini-loader for SCOP updates */
 .mini-loader {
   display: inline-block;
   width: 12px;
@@ -840,14 +840,14 @@ input:checked + .slider:before {
   }
 }
 
-/* COP Control Styles */
-.cop-control-container {
+/* SCOP Control Styles */
+.scop-control-container {
     display: flex;
     align-items: center;
     margin-right: 10px; /* Endret fra margin-left til margin-right */
 }
 
-.cop-control {
+.scop-control {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -860,7 +860,7 @@ input:checked + .slider:before {
     position: relative;
 }
 
-.cop-header {
+.scop-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -868,7 +868,7 @@ input:checked + .slider:before {
     margin-bottom: 2px;
 }
 
-.cop-control label {
+.scop-control label {
     margin-bottom: 0;
     white-space: nowrap;
     font-weight: 500;
@@ -882,7 +882,7 @@ input:checked + .slider:before {
     margin-bottom: 2px;
 }
 
-.cop-control #cop-slider {
+.scop-control #scop-slider {
     width: 100%;
     cursor: pointer;
     margin: 1px 0;
@@ -893,7 +893,7 @@ input:checked + .slider:before {
     background: linear-gradient(to right, #e74c3c, #f1c40f, #2ecc71);
 }
 
-.cop-control #cop-slider::-webkit-slider-thumb {
+.scop-control #scop-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 15px;
@@ -904,7 +904,7 @@ input:checked + .slider:before {
     border: 2px solid var(--secondary-color);
 }
 
-.cop-control #cop-slider::-moz-range-thumb {
+.scop-control #scop-slider::-moz-range-thumb {
     width: 15px;
     height: 15px;
     border-radius: 50%;
@@ -922,13 +922,13 @@ input:checked + .slider:before {
     opacity: 0.8;
 }
 
-.cop-control-buttons {
+.scop-control-buttons {
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.cop-control #reset-cop {
+.scop-control #reset-scop {
     background: none;
     border: none;
     color: white;
@@ -940,12 +940,12 @@ input:checked + .slider:before {
     margin-right: 3px;
 }
 
-.cop-control #reset-cop:hover {
+.scop-control #reset-scop:hover {
     color: var(--warning-yellow);
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.cop-info-tooltip {
+.scop-info-tooltip {
     position: relative;
     display: inline-block;
     margin-left: 0;
@@ -953,7 +953,7 @@ input:checked + .slider:before {
     cursor: help;
 }
 
-.cop-info-tooltip i {
+.scop-info-tooltip i {
     font-size: 0.75rem;
     color: var(--nav-text);
     opacity: 0.8;
@@ -961,11 +961,11 @@ input:checked + .slider:before {
     padding: 2px;
 }
 
-.cop-info-tooltip:hover i {
+.scop-info-tooltip:hover i {
     opacity: 1;
 }
 
-.cop-info-tooltip .tooltip-text {
+.scop-info-tooltip .tooltip-text {
     visibility: hidden;
     width: 230px;
     background-color: var(--primary-color);
@@ -986,7 +986,7 @@ input:checked + .slider:before {
     pointer-events: none;
 }
 
-.cop-info-tooltip .tooltip-text::after {
+.scop-info-tooltip .tooltip-text::after {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -997,20 +997,20 @@ input:checked + .slider:before {
     border-color: transparent transparent var(--primary-color) transparent;
 }
 
-.cop-info-tooltip.active .tooltip-text {
+.scop-info-tooltip.active .tooltip-text {
     visibility: visible;
     opacity: 1;
     display: block;
 }
 
-.cop-info-tooltip:hover .tooltip-text {
+.scop-info-tooltip:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
     display: block;
 }
 
 @media (max-width: 768px) {
-    .cop-control-container {
+    .scop-control-container {
         position: fixed;
         top: 60px; /* Endret fra 70px for å passe bedre med navbar */
         left: 50%;
@@ -1025,19 +1025,19 @@ input:checked + .slider:before {
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
     
-    .cop-control {
+    .scop-control {
         width: 100%;
         justify-content: center;
         background-color: transparent;
         padding: 5px;
     }
     
-    .cop-header {
+    .scop-header {
         width: 100%;
         justify-content: space-between;
     }
 
-    .cop-info-tooltip .tooltip-text {
+    .scop-info-tooltip .tooltip-text {
         width: 200px;
         bottom: auto;
         top: 25px;
@@ -1046,7 +1046,7 @@ input:checked + .slider:before {
         transform: none;
     }
     
-    .cop-info-tooltip .tooltip-text::after {
+    .scop-info-tooltip .tooltip-text::after {
         top: auto;
         bottom: 100%;
         right: 5px;
@@ -1054,8 +1054,8 @@ input:checked + .slider:before {
     }
 }
 
-/* COP updating animation */
-.cop-updating {
+/* SCOP updating animation */
+.scop-updating {
     display: inline-block;
     position: relative;
     animation: pulse 1.5s infinite;

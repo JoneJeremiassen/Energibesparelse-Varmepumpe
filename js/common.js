@@ -2,8 +2,8 @@
 let data2023 = [];
 let data2024 = [];
 let data2025 = [];
-let varmepumpeCOP = 5.0; // Standard COP-verdi
-let debounceTimer; // For å forhindre for mange oppdateringer ved COP-endring
+let varmepumpeCOP = 5.0; // Standard SCOP-verdi
+let debounceTimer; // For å forhindre for mange oppdateringer ved SCOP-endring
 
 // Mapper for månedsnavn til numerisk verdi for sortering
 const månedTilNummer = {
@@ -66,13 +66,13 @@ async function fetchData(url) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        // Beregn dynamiske verdier basert på COP
+        // Beregn dynamiske verdier basert på SCOP
         return data.map(month => {
             if (month.oppvarming === null || month.strømpris === null) {
                 return month;
             }
             
-            // Kalkuler dynamiske verdier basert på COP
+            // Kalkuler dynamiske verdier basert på SCOP
             const medVarmepumpe = month.oppvarming / varmepumpeCOP;
             const spartStrøm = month.oppvarming - medVarmepumpe;
             const estimertSpartKostnad = spartStrøm * month.strømpris;
@@ -125,8 +125,8 @@ function initNavigation() {
     // Markér aktiv navigasjonslink
     updateActiveNavigation();
     
-    // Initialiser COP-kontroller ETTER temabytte
-    initCOPControl();
+    // Initialiser SCOP-kontroller ETTER temabytte
+    initSCOPControl();
 }
 
 // Setter aktiv klasse på navigasjonslenker basert på gjeldende side
@@ -295,52 +295,52 @@ function generateStatistics(data, year) {
     };
 }
 
-// Funksjon for å håndtere COP-innstillinger
-function initCOPControl() {
-    // Sjekk om det finnes en lagret COP-verdi
-    const storedCOP = localStorage.getItem('varmepumpeCOP');
-    if (storedCOP) {
-        varmepumpeCOP = parseFloat(storedCOP);
+// Funksjon for å håndtere SCOP-innstillinger
+function initSCOPControl() {
+    // Sjekk om det finnes en lagret SCOP-verdi
+    const storedSCOP = localStorage.getItem('varmepumpeSCOP') || localStorage.getItem('varmepumpeCOP'); // Backward compatibility
+    if (storedSCOP) {
+        varmepumpeCOP = parseFloat(storedSCOP); // Vi beholder variabelnavnet for kompatibilitet
     }
     
-    // Finn COP-kontrolleren eller opprett den hvis den ikke finnes
-    let copContainer = document.querySelector('.cop-control-container');
+    // Finn SCOP-kontrolleren eller opprett den hvis den ikke finnes
+    let scopContainer = document.querySelector('.scop-control-container');
     
-    if (!copContainer) {
-        // Opprett COP-kontroller hvis den ikke finnes
-        copContainer = document.createElement('div');
-        copContainer.className = 'cop-control-container';
+    if (!scopContainer) {
+        // Opprett SCOP-kontroller hvis den ikke finnes
+        scopContainer = document.createElement('div');
+        scopContainer.className = 'scop-control-container';
         
-        // Plassering: Vi flytter COP-slideren FØR theme-switch-wrapper
+        // Plassering: Vi flytter SCOP-slideren FØR theme-switch-wrapper
         const navContainer = document.querySelector('.nav-container');
         const themeSwitch = document.querySelector('.theme-switch-wrapper');
         
         if (navContainer && themeSwitch) {
-            navContainer.insertBefore(copContainer, themeSwitch);
+            navContainer.insertBefore(scopContainer, themeSwitch);
         } else if (navContainer) {
-            navContainer.appendChild(copContainer);
+            navContainer.appendChild(scopContainer);
         } else {
-            console.warn('Kunne ikke finne .nav-container for å legge til COP-kontrollen');
+            console.warn('Kunne ikke finne .nav-container for å legge til SCOP-kontrollen');
             return; // Avslutt funksjonen hvis navContainer ikke finnes
         }
-    }    // Opprett innholdet i COP-kontrolleren
-    copContainer.innerHTML = `
-        <div class="cop-control">
-            <div class="cop-header">
-                <label for="cop-slider">COP: <span id="cop-value">${varmepumpeCOP.toFixed(1)}</span></label>
-                <div class="cop-control-buttons">                    <button id="reset-cop" title="Tilbakestill til standard verdi (5.0)">
+    }    // Opprett innholdet i SCOP-kontrolleren
+    scopContainer.innerHTML = `
+        <div class="scop-control">
+            <div class="scop-header">
+                <label for="scop-slider">SCOP: <span id="scop-value">${varmepumpeCOP.toFixed(1)}</span></label>
+                <div class="scop-control-buttons">                    <button id="reset-scop" title="Tilbakestill til standard verdi (5.0)">
                         <i class="fas fa-undo"></i>
-                    </button>                    <div class="cop-info-tooltip">
+                    </button>                    <div class="scop-info-tooltip">
                         <i class="fas fa-info-circle"></i>
-                        <span class="tooltip-text">COP (Coefficient of Performance) angir hvor effektiv varmepumpen er. Typiske verdier: 1-2 = lav, 3-4 = middels, 5-6 = høy effektivitet.</span>
+                        <span class="tooltip-text">SCOP (Seasonal Coefficient of Performance) angir varmepumpens gjennomsnittlige effektivitet over en hel oppvarmingssesong. Typiske verdier: 1-3 = lav, 3-4,5 = middels, 4,5-6 = høy effektivitet.</span>
                     </div>
                 </div>
             </div>
             <div class="slider-container">
-                <input type="range" id="cop-slider" min="1" max="6" step="0.1" value="${varmepumpeCOP}">
+                <input type="range" id="scop-slider" min="1" max="6" step="0.1" value="${varmepumpeCOP}">
                 <div class="slider-labels">
                     <span>1.0</span>
-                    <span>3.0</span>
+                    <span>3.5</span>
                     <span>6.0</span>
                 </div>
             </div>
@@ -348,21 +348,21 @@ function initCOPControl() {
     `;
     
     // Legg til event listeners
-    const copSlider = document.getElementById('cop-slider');
-    const copValue = document.getElementById('cop-value');
-    const resetCOP = document.getElementById('reset-cop');
-    const infoIcon = document.querySelector('.cop-info-tooltip i');    // Sørg for at informasjonsikonet fungerer med både hover og klikk (for mobile enheter)
+    const scopSlider = document.getElementById('scop-slider');
+    const scopValue = document.getElementById('scop-value');
+    const resetSCOP = document.getElementById('reset-scop');
+    const infoIcon = document.querySelector('.scop-info-tooltip i');    // Sørg for at informasjonsikonet fungerer med både hover og klikk (for mobile enheter)
     if (infoIcon) {
         infoIcon.addEventListener('click', (e) => {
-            const tooltipContainer = e.currentTarget.closest('.cop-info-tooltip');
+            const tooltipContainer = e.currentTarget.closest('.scop-info-tooltip');
             tooltipContainer.classList.toggle('active');
             e.stopPropagation();
         });
         
         // Lukk tooltip når man klikker hvor som helst ellers på siden
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.cop-info-tooltip')) {
-                const tooltipContainers = document.querySelectorAll('.cop-info-tooltip');
+            if (!e.target.closest('.scop-info-tooltip')) {
+                const tooltipContainers = document.querySelectorAll('.scop-info-tooltip');
                 tooltipContainers.forEach(container => {
                     container.classList.remove('active');
                 });
@@ -370,14 +370,14 @@ function initCOPControl() {
         });
     }
 
-    if (copSlider && copValue) {
-        copSlider.addEventListener('input', (e) => {            const newCOP = parseFloat(e.target.value);
-            varmepumpeCOP = newCOP;
-            copValue.textContent = newCOP.toFixed(1);
-            localStorage.setItem('varmepumpeCOP', newCOP.toString());
+    if (scopSlider && scopValue) {
+        scopSlider.addEventListener('input', (e) => {            const newSCOP = parseFloat(e.target.value);
+            varmepumpeCOP = newSCOP; // Beholder variabelnavnet for kompatibilitet
+            scopValue.textContent = newSCOP.toFixed(1);
+            localStorage.setItem('varmepumpeSCOP', newSCOP.toString());
             
-            // Vis en mini-loader ved COP-verdien
-            copValue.innerHTML = `<span class="cop-updating">${newCOP.toFixed(1)}</span>`;
+            // Vis en mini-loader ved SCOP-verdien
+            scopValue.innerHTML = `<span class="scop-updating">${newSCOP.toFixed(1)}</span>`;
             
             // Lagre nåværende scroll-posisjon
             const scrollPosition = window.scrollY || document.documentElement.scrollTop;
@@ -385,10 +385,10 @@ function initCOPControl() {
             // Debounce - venter med å oppdatere til slideren stopper
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(async () => {
-                // Oppdater dataene med ny COP-verdi
+                // Oppdater dataene med ny SCOP-verdi
                 await recalculateData();
-                // Oppdater COP-visningen når dataene er klare
-                copValue.textContent = newCOP.toFixed(1);
+                // Oppdater SCOP-visningen når dataene er klare
+                scopValue.textContent = newSCOP.toFixed(1);
                 
                 // Gjenopprett scroll-posisjon etter oppdatering
                 window.scrollTo({
@@ -397,22 +397,22 @@ function initCOPControl() {
                 });
             }, 300);
         });
-    }    if (resetCOP) {        resetCOP.addEventListener('click', () => {
+    }    if (resetSCOP) {        resetSCOP.addEventListener('click', () => {
             varmepumpeCOP = 5.0;
-            if (copSlider) copSlider.value = "5.0";
-            if (copValue) {
-                copValue.innerHTML = `<span class="cop-updating">5.0</span>`;
+            if (scopSlider) scopSlider.value = "5.0";
+            if (scopValue) {
+                scopValue.innerHTML = `<span class="scop-updating">5.0</span>`;
             }
-            localStorage.setItem('varmepumpeCOP', "5.0");
+            localStorage.setItem('varmepumpeSCOP', "5.0");
             
             // Lagre nåværende scroll-posisjon
             const scrollPosition = window.scrollY || document.documentElement.scrollTop;
             
             // Vis loading indikator og oppdater data
             setTimeout(async () => {
-                // Oppdater dataene med ny COP-verdi
+                // Oppdater dataene med ny SCOP-verdi
                 await recalculateData();
-                if (copValue) copValue.textContent = "5.0";
+                if (scopValue) scopValue.textContent = "5.0";
                 
                 // Gjenopprett scroll-posisjon etter oppdatering
                 window.scrollTo({
@@ -423,7 +423,7 @@ function initCOPControl() {
         });    }
 }
 
-// Oppdaterer alle data med ny COP-verdi
+// Oppdaterer alle data med ny SCOP-verdi
 async function recalculateData() {
     // Lagre nåværende scroll-posisjon
     const scrollPosition = window.scrollY || document.documentElement.scrollTop;
@@ -432,31 +432,29 @@ async function recalculateData() {
         showLoader(true);
         
         // Last inn dataene på nytt fra JSON
-        let rawData2023, rawData2024, rawData2025;
-        
-        try {
-            rawData2023 = await fetchRawData('data/data2023.json');
-            data2023 = calculateDerivedValues(rawData2023);
-            console.log("Data 2023 rekalkukert med ny COP:", varmepumpeCOP);
-        } catch (error) {
-            console.error('Feil ved rekalkukering av 2023-data:', error);
-        }
-        
-        try {
-            rawData2024 = await fetchRawData('data/data2024.json');
-            data2024 = calculateDerivedValues(rawData2024);
-            console.log("Data 2024 rekalkukert med ny COP:", varmepumpeCOP);
-        } catch (error) {
-            console.error('Feil ved rekalkukering av 2024-data:', error);
-        }
-        
-        try {
-            rawData2025 = await fetchRawData('data/data2025.json');
-            data2025 = calculateDerivedValues(rawData2025);
-            console.log("Data 2025 rekalkukert med ny COP:", varmepumpeCOP);
-        } catch (error) {
-            console.error('Feil ved rekalkukering av 2025-data:', error);
-        }
+        let rawData2023, rawData2024, rawData2025;            try {
+                rawData2023 = await fetchRawData('data/data2023.json');
+                data2023 = calculateDerivedValues(rawData2023);
+                console.log("Data 2023 rekalkukert med ny SCOP:", varmepumpeCOP);
+            } catch (error) {
+                console.error('Feil ved rekalkukering av 2023-data:', error);
+            }
+            
+            try {
+                rawData2024 = await fetchRawData('data/data2024.json');
+                data2024 = calculateDerivedValues(rawData2024);
+                console.log("Data 2024 rekalkukert med ny SCOP:", varmepumpeCOP);
+            } catch (error) {
+                console.error('Feil ved rekalkukering av 2024-data:', error);
+            }
+            
+            try {
+                rawData2025 = await fetchRawData('data/data2025.json');
+                data2025 = calculateDerivedValues(rawData2025);
+                console.log("Data 2025 rekalkukert med ny SCOP:", varmepumpeCOP);
+            } catch (error) {
+                console.error('Feil ved rekalkukering av 2025-data:', error);
+            }
         
         // Oppdater UI avhengig av hvilken side vi er på
         const path = window.location.pathname;
@@ -493,7 +491,7 @@ async function recalculateData() {
             // Oppdater alle grafer ved å trigge en window resize event - dette får chart.js til å re-render
             window.dispatchEvent(new Event('resize'));
             
-            console.log("UI er oppdatert med ny COP-verdi:", varmepumpeCOP);
+            console.log("UI er oppdatert med ny SCOP-verdi:", varmepumpeCOP);
         } catch (uiError) {
             console.error('Feil ved oppdatering av UI etter rekalkukering:', uiError);        }
         
@@ -559,7 +557,7 @@ async function fetchRawData(url) {
     }
 }
 
-// Beregner dynamiske verdier basert på COP
+// Beregner dynamiske verdier basert på SCOP
 function calculateDerivedValues(data) {
     if (!Array.isArray(data)) {
         console.error('Ugyldig data sendt til calculateDerivedValues: Forventet array');
@@ -591,7 +589,7 @@ function calculateDerivedValues(data) {
             
             // Sjekk at vi ikke får negative verdier eller div by zero
             if (varmepumpeCOP <= 0) {
-                console.warn('Ugyldig COP-verdi (≤ 0) - bruker standardverdi 5.0');
+                console.warn('Ugyldig SCOP-verdi (≤ 0) - bruker standardverdi 5.0');
                 varmepumpeCOP = 5.0;
             }
             

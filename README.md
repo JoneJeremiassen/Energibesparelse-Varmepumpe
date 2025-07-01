@@ -21,7 +21,7 @@ Et interaktivt webbasert verktøy for å visualisere energibesparelse ved bruk a
 
 - **Interaktiv COP-kontroll**: Juster varmepumpens effektivitet (COP) via en slider for å se hvordan det påvirker energibesparelser.
 - **Dynamisk dataoppdatering**: Alle beregninger, grafer og tabeller oppdateres automatisk når COP-verdien endres, uansett hvilken side du er på.
-- **Informativ COP-slider**: Med fargegradient, markeringer, og informasjonspopup for bedre forståelse.
+- **Informativ SCOP-slider**: Med fargegradient, markeringer, og informasjonspopup for bedre forståelse.
 - **Årsbaserte Dataoversikter**: Separate sider for energidata fra 2023, 2024 og 2025.
 - **Sammenligning av Varmepumper**: Side som sammenligner ulike varmepumpetilbud med pris, effekt, lydnivå og andre spesifikasjoner.
 - **Responsive Grafer**: Visualisering av energiforbruk, besparelser og kostnadsreduksjoner.
@@ -148,12 +148,12 @@ For å endre standardverdien for COP, modifiser følgende linje i `common.js`:
 let varmepumpeCOP = 5.0; // Endre til ønsket standardverdi
 ```
 
-### Tilpasse COP-slideren
+### Tilpasse SCOP-slideren
 
-For å endre COP-sliderens område eller standardverdi, modifiser følgende i HTML og CSS:
+For å endre SCOP-sliderens område eller standardverdi, modifiser følgende i HTML og CSS:
 
 1. Endre `min`, `max` og `value` attributtene i HTML for slideren
-2. Oppdater fargegrient i CSS (`.cop-slider::-webkit-slider-runnable-track`)
+2. Oppdater fargegrient i CSS (`.scop-slider::-webkit-slider-runnable-track`)
 3. Oppdater tooltipteksten i informasjonsikonet
 
 ### Legge til nye data
@@ -179,7 +179,7 @@ Systemet er designet for å fungere godt på alle enheter. For å forbedre respo
 Applikasjonen bruker flere teknikker for å sikre god ytelse:
 
 - Caching av JSON-data for å unngå unødvendige nettverkskall
-- Debouncing av COP-slider-hendelser for å redusere unødvendige oppdateringer
+- Debouncing av SCOP-slider-hendelser for å redusere unødvendige oppdateringer
 - Lazy loading av grafer og innhold
 - Effektive DOM-manipulasjonsstrategier
 
@@ -260,7 +260,7 @@ Her er en oversikt over noen av de viktigste funksjonene i applikasjonen:
 
 #### I `common.js`:
 
-- `initCOPControl()`: Setter opp COP-slideren med events, tooltips og visual feedback
+- `initCOPControl()`: Setter opp SCOP-slideren med events, tooltips og visual feedback
 - `recalculateData()`: Beregner alle dataavledede verdier basert på gjeldende COP
 - `updateCharts()`: Oppdaterer alle grafer på gjeldende side
 - `cacheJSON()`: Implementerer caching av JSON-data for bedre ytelse
