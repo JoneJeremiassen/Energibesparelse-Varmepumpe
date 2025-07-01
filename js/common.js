@@ -134,26 +134,25 @@ function initNavigation() {
 // Setter aktiv klasse på navigasjonslenker basert på gjeldende side
 function updateActiveNavigation() {
     const path = window.location.pathname;
-    const navItems = document.querySelectorAll('.nav-item');
+    const navItems = document.querySelectorAll('.nav-links .nav-item');
     
+    // Fjern aktiv klasse fra alle elementer først
     navItems.forEach(item => {
-        const link = item.querySelector('a');
-        if (!link) return;
-        
-        // Fjern aktiv klasse
         item.classList.remove('active');
-        
-        // Sjekk om denne lenken matcher gjeldende side
-        if ((path.includes('index.html') || path.endsWith('/') || path.endsWith('\\')) && link.href.includes('index.html')) {
-            item.classList.add('active');
-        } else if (path.includes('data2023.html') && link.href.includes('data2023.html')) {
-            item.classList.add('active');
-        } else if (path.includes('data2024.html') && link.href.includes('data2024.html')) {
-            item.classList.add('active');
-        } else if (path.includes('data2025.html') && link.href.includes('data2025.html')) {
-            item.classList.add('active');
-        }
     });
+    
+    // Sett aktiv klasse basert på gjeldende side
+    if (path.includes('data2023.html')) {
+        document.querySelector('.nav-item a[href*="data2023.html"]').parentElement.classList.add('active');
+    } else if (path.includes('data2024.html')) {
+        document.querySelector('.nav-item a[href*="data2024.html"]').parentElement.classList.add('active');
+    } else if (path.includes('data2025.html')) {
+        document.querySelector('.nav-item a[href*="data2025.html"]').parentElement.classList.add('active');
+    } else if (path.includes('tilbud-varmepumper.html')) {
+        document.querySelector('.nav-item a[href*="tilbud-varmepumper.html"]').parentElement.classList.add('active');
+    }
+    // Hvis ingen av sidene matcher (eller vi er på index.html), setter vi ingen nav-item som aktiv
+    // siden logoen nå fungerer som hjemknapp
 }
 
 // Funksjon for å håndtere temabytte (dark/light mode)

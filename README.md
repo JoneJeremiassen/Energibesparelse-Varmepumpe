@@ -23,6 +23,7 @@ Et interaktivt webbasert verktøy for å visualisere energibesparelse ved bruk a
 - **Dynamisk dataoppdatering**: Alle beregninger, grafer og tabeller oppdateres automatisk når COP-verdien endres, uansett hvilken side du er på.
 - **Informativ COP-slider**: Med fargegradient, markeringer, og informasjonspopup for bedre forståelse.
 - **Årsbaserte Dataoversikter**: Separate sider for energidata fra 2023, 2024 og 2025.
+- **Sammenligning av Varmepumper**: Side som sammenligner ulike varmepumpetilbud med pris, effekt, lydnivå og andre spesifikasjoner.
 - **Responsive Grafer**: Visualisering av energiforbruk, besparelser og kostnadsreduksjoner.
 - **Detaljerte Tabeller**: Månedlige data presentert i ryddige tabeller.
 - **Responsivt Design**: Fungerer på alle enheter fra desktop til mobile.
@@ -49,6 +50,7 @@ Energibesparelse-Varmepumpe/
 ├── data2023.html           # Side for 2023-data
 ├── data2024.html           # Side for 2024-data
 ├── data2025.html           # Side for 2025-data
+├── tilbud-varmepumper.html # Side for sammenligning av varmepumpetilbud
 ├── css/
 │   └── style.css           # Hovedstilark
 ├── js/
@@ -83,7 +85,8 @@ Denne løsningen krever ingen spesiell installasjon. Siden den er bygget med ren
 
 ### Navigasjon
 
-- Bruk navigasjonsbaren øverst for å bytte mellom hovedsiden og årsbaserte dataoversikter.
+- Bruk logo-lenken "Energibesparelse" øverst i navigasjonsbaren for å gå tilbake til hovedsiden.
+- Bruk navigasjonsbaren øverst for å bytte mellom årsbaserte dataoversikter og varmepumpetilbud.
 - På mobile enheter, bruk hamburgermenyen for navigasjon.
 
 ### COP-kontroll
