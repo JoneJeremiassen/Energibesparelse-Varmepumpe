@@ -332,14 +332,14 @@ function initSCOPControl() {
                         <i class="fas fa-undo"></i>
                     </button>                    <div class="scop-info-tooltip">
                         <i class="fas fa-info-circle"></i>
-                        <span class="tooltip-text">SCOP (Seasonal Coefficient of Performance) angir varmepumpens gjennomsnittlige effektivitet over en hel oppvarmingssesong. Typiske verdier: 1-3 = lav, 3-4,5 = middels, 4,5-6 = høy effektivitet.</span>
+                        <span class="tooltip-text">SCOP (Seasonal Coefficient of Performance) angir varmepumpens gjennomsnittlige effektivitet over en hel oppvarmingssesong. Typiske verdier: 1,5-3 = lav, 3-4,5 = middels, 4,5-6 = høy effektivitet. De fleste varmepumper har SCOP over 1,5, og under dette er besparelsene minimale.</span>
                     </div>
                 </div>
             </div>
             <div class="slider-container">
-                <input type="range" id="scop-slider" min="1" max="6" step="0.1" value="${varmepumpeCOP}">
+                <input type="range" id="scop-slider" min="1.5" max="6" step="0.1" value="${varmepumpeCOP}">
                 <div class="slider-labels">
-                    <span>1.0</span>
+                    <span>1.5</span>
                     <span>3.5</span>
                     <span>6.0</span>
                 </div>
@@ -587,10 +587,21 @@ function calculateDerivedValues(data) {
                 };
             }
             
-            // Sjekk at vi ikke får negative verdier eller div by zero
+            // Sjekk at vi ikke får negative verdier eller for lave verdier som kan gi merkelige resultater
             if (varmepumpeCOP <= 0) {
                 console.warn('Ugyldig SCOP-verdi (≤ 0) - bruker standardverdi 5.0');
                 varmepumpeCOP = 5.0;
+            }
+            
+            // Ved veldig lave SCOP-verdier (nær 1.0) vil beregningene gi veldig små besparelser
+            // Vi håndterer dette særskilt for å unngå fremvisning av merkelige verdier
+            if (varmepumpeCOP < 1.2) {
+                return {
+                    ...month,
+                    medVarmepumpe: month.oppvarming,
+                    spartStrøm: 0,
+                    estimertSpartKostnad: 0
+                };
             }
             
             const medVarmepumpe = month.oppvarming / varmepumpeCOP;

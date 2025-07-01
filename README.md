@@ -95,7 +95,7 @@ COP (Coefficient of Performance) er et mål på varmepumpens effektivitet.
 
 - Bruk slideren i navigasjonsbaren til å justere COP-verdien.
 - Standard COP-verdi er satt til 5.0, som er typisk for effektive varmepumper i 2025.
-- COP-verdiene rangerer fra 1.0 (lav effektivitet) til 6.0 (høy effektivitet).
+- COP-verdiene rangerer fra 1.5 (lav effektivitet) til 6.0 (høy effektivitet).
 - Fargegradient på slideren gir visuell indikasjon på effektivitetsnivået (rød for lav, grønn for høy).
 - Trykk på tilbakestill-knappen (↺) for å returnere til standard COP-verdi (5.0).
 - Trykk eller hover over informasjonsikonet (i) for detaljert informasjon om COP.
@@ -152,9 +152,10 @@ let varmepumpeCOP = 5.0; // Endre til ønsket standardverdi
 
 For å endre SCOP-sliderens område eller standardverdi, modifiser følgende i HTML og CSS:
 
-1. Endre `min`, `max` og `value` attributtene i HTML for slideren
+1. Endre `min`, `max` og `value` attributtene i HTML for slideren (minimum er satt til 1.5 da lavere verdier gir minimale besparelser)
 2. Oppdater fargegrient i CSS (`.scop-slider::-webkit-slider-runnable-track`)
 3. Oppdater tooltipteksten i informasjonsikonet
+4. Ved endringer i SCOP-området bør beregningslogikken i `calculateDerivedValues()` også gjennomgås
 
 ### Legge til nye data
 
