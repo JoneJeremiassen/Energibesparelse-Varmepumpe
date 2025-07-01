@@ -1113,6 +1113,12 @@ input:checked + .slider:before {
     padding: 12px;
     border: 1px solid var(--primary-color);
     text-align: left;
+    vertical-align: middle;
+}
+
+.comparison-table td:first-child {
+    text-align: left;
+    min-width: 180px; /* Gir mer plass til modellnavnet og lenken */
 }
 
 .comparison-table th {
@@ -1128,10 +1134,16 @@ input:checked + .slider:before {
 
 .comparison-table tr:nth-child(odd) {
     background-color: var(--table-odd-row);
+    transition: background-color 0.3s ease;
 }
 
 .comparison-table tr:nth-child(even) {
     background-color: var(--table-even-row);
+    transition: background-color 0.3s ease;
+}
+
+.comparison-table tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.1);
 }
 
 .table-note {
@@ -1309,4 +1321,74 @@ input:checked + .slider:before {
 .dark-mode .comparison-table th.sorted-asc,
 .dark-mode .comparison-table th.sorted-desc {
     background-color: var(--dark-secondary-color);
+}
+
+/* Stilisering av lenker i varmepumpetabellen */
+.comparison-table td a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    padding: 6px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    width: fit-content;
+    margin: 0;
+}
+
+.dark-mode .comparison-table td a {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.comparison-table td a:hover {
+    background-color: rgba(52, 152, 219, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode .comparison-table td a:hover {
+    background-color: rgba(52, 152, 219, 0.25);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.comparison-table td a::before {
+    content: "\f02d"; /* Font Awesome ikon for brosjyre/produktark */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 8px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.comparison-table td a::after {
+    content: "\f35d"; /* Font Awesome ikon for ekstern lenke (nyere versjon) */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 0.8em;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.comparison-table td a:hover::after {
+    opacity: 1;
+    transform: translateX(3px) translateY(-3px);
+}
+
+/* Stilisering av spesifikke modellenker basert på produsent */
+.comparison-table td a[href*="daikin"]:hover {
+    background-color: rgba(30, 136, 229, 0.1);
+}
+
+.comparison-table td a[href*="toshiba"]:hover {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.comparison-table td a[href*="wilfa"]:hover {
+    background-color: rgba(76, 175, 80, 0.1);
 }
