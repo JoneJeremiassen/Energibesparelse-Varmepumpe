@@ -1270,6 +1270,22 @@ input:checked + .slider:before {
     .dealer-cards {
         grid-template-columns: 1fr;
     }
+    
+    /* Responsive table for varmepumper */
+    .comparison-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+    
+    .comparison-table {
+        min-width: 650px;
+    }
+    
+    .table-note {
+        font-size: 0.8rem;
+    }
 }
 
 /* Tabell sorteringsstiler */

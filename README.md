@@ -55,10 +55,11 @@ Energibesparelse-Varmepumpe/
 │   └── style.css           # Hovedstilark
 ├── js/
 │   ├── common.js           # Felles funksjoner og globale variabler
-│   ├── script.js           # Hovedsidens spesifikke funksjonalitet
-│   ├── data2023.js         # 2023-sidens spesifikke funksjonalitet
-│   ├── data2024.js         # 2024-sidens spesifikke funksjonalitet
-│   └── data2025.js         # 2025-sidens spesifikke funksjonalitet
+│   ├── script.js           # JavaScript for forsiden
+│   ├── data2023.js         # JavaScript for 2023-siden
+│   ├── data2024.js         # JavaScript for 2024-siden
+│   ├── data2025.js         # JavaScript for 2025-siden
+│   └── table-sort.js       # Sorteringsfunksjonalitet for varmepumpetabellen
 └── data/
     ├── data2023.json       # Energidata for 2023
     ├── data2024.json       # Energidata for 2024
@@ -67,185 +68,96 @@ Energibesparelse-Varmepumpe/
 
 ## Installasjon og Oppsett
 
-Denne løsningen krever ingen spesiell installasjon. Siden den er bygget med rene frontend-teknologier, kan den kjøres direkte i en nettleser.
+Prosjektet krever ingen installasjon eller konfigurasjon av server, da det er bygget med ren front-end teknologi.
 
-1. **Klone eller laste ned repoet**:
+For å sette opp prosjektet lokalt:
+
+1. Klon repositoriet:
    ```bash
    git clone https://github.com/JoneJeremiassen/Energibesparelse-Varmepumpe.git
    ```
 
-2. **Åpne i en nettleser**:
-   - Åpne `index.html` direkte i en nettleser, eller
-   - Bruk en lokal server for å betjene filene (anbefalt for produksjonsmiljø)
+2. Naviger til prosjektmappen:
+   ```bash
+   cd Energibesparelse-Varmepumpe
+   ```
 
-3. **Alternativt, bruk en VS Code-utvidelse**:
-   - Bruk "Live Server" for VS Code for enkel lokal betjening
+3. Åpne `index.html` i en nettleser.
+
+Alternativt kan du hoste filene på en hvilken som helst webserver eller hosting-plattform som støtter statiske nettsider (GitHub Pages, Netlify, Vercel, etc.).
 
 ## Bruk
 
-### Navigasjon
-
-- Bruk logo-lenken "Energibesparelse" øverst i navigasjonsbaren for å gå tilbake til hovedsiden.
-- Bruk navigasjonsbaren øverst for å bytte mellom årsbaserte dataoversikter og varmepumpetilbud.
-- På mobile enheter, bruk hamburgermenyen for navigasjon.
-
-### COP-kontroll
-
-COP (Coefficient of Performance) er et mål på varmepumpens effektivitet.
-
-- Bruk slideren i navigasjonsbaren til å justere COP-verdien.
-- Standard COP-verdi er satt til 5.0, som er typisk for effektive varmepumper i 2025.
-- COP-verdiene rangerer fra 1.5 (lav effektivitet) til 6.0 (høy effektivitet).
-- Fargegradient på slideren gir visuell indikasjon på effektivitetsnivået (rød for lav, grønn for høy).
-- Trykk på tilbakestill-knappen (↺) for å returnere til standard COP-verdi (5.0).
-- Trykk eller hover over informasjonsikonet (i) for detaljert informasjon om COP.
-
-Når COP-verdien endres, vil alle beregninger, grafer og tabeller oppdateres dynamisk på alle sider for å reflektere den nye effektiviteten.
-
-### Tema
-
-- Bruk temabryteren i navigasjonsbaren for å veksle mellom lys og mørk modus.
-- Innstillingen lagres lokalt og vil beholdes mellom besøk.
+1. **Hovedside**: Gir en oversikt over samlet energibesparelse for perioden 2023-2025
+2. **Årsvisninger**: Navigér til de spesifikke årssidene for detaljert data for hvert år
+3. **SCOP-justering**: Bruk slideren for å justere varmepumpens effektivitet og se hvordan det påvirker besparelsene
+4. **Varmepumpesammenligning**: Se sammenligning av ulike varmepumper og deres spesifikasjoner
+5. **Sortering**: Klikk på kolonneoverskrifter i tabeller for å sortere dataene
+6. **Mørk/lys modus**: Bytt mellom lys og mørk modus med bryteren i toppmenyens høyre hjørne
 
 ## Datastruktur
 
-Dataene for hvert år er lagret i separate JSON-filer med følgende struktur:
+Prosjektet bruker følgende datastruktur i JSON-filene:
 
 ```json
 [
   {
     "måned": "Januar 2023",
-    "oppvarming": 1500,
-    "strømpris": 1.45
+    "oppvarming": 476,
+    "strømpris": 1.67
   },
   ...
 ]
 ```
 
-Der:
-- `måned`: Navnet på måneden og året
-- `oppvarming`: Strømforbruk til oppvarming i kWh
-- `strømpris`: Gjennomsnittlig strømpris for måneden i kr/kWh
+Hvor:
+- `måned`: Navn på måned og år
+- `oppvarming`: Faktisk strømforbruk til oppvarming i kWh
+- `strømpris`: Gjennomsnittlig strømpris for måneden i NOK per kWh
+
+Øvrige verdier beregnes dynamisk basert på brukerens valgte SCOP-verdi.
 
 ## Beregninger
 
-Systemet utfører følgende nøkkelberegninger basert på COP-verdien:
+Hovedberegningene i systemet er:
 
-1. **Strømforbruk med varmepumpe**: `oppvarming / COP`
-2. **Spart strøm**: `oppvarming - (oppvarming / COP)`
-3. **Estimert spart kostnad**: `spart strøm * strømpris`
-4. **Akkumulert besparelse**: Summen av alle månedlige besparelser over tid
+1. **Oppvarming med varmepumpe**: 
+   ```
+   medVarmepumpe = oppvarming / varmepumpeCOP
+   ```
 
-Disse beregningene oppdateres dynamisk når COP-verdien endres, og alle grafer, tabeller og statistikker oppdateres samtidig. Systemet bruker debouncing for å sikre jevn oppdatering og animasjoner som gir brukeren visuell feedback.
+2. **Energibesparelse**:
+   ```
+   besparelse = oppvarming - medVarmepumpe
+   ```
+
+3. **Kostnadsbesparelse**:
+   ```
+   kostnadsbesparelse = besparelse * strømpris
+   ```
 
 ## Tilpasninger
 
-### Endre standardverdier
+Prosjektet kan tilpasses på flere måter:
 
-For å endre standardverdien for COP, modifiser følgende linje i `common.js`:
-
-```javascript
-let varmepumpeCOP = 5.0; // Endre til ønsket standardverdi
-```
-
-### Tilpasse SCOP-slideren
-
-For å endre SCOP-sliderens område eller standardverdi, modifiser følgende i HTML og CSS:
-
-1. Endre `min`, `max` og `value` attributtene i HTML for slideren (minimum er satt til 1.5 da lavere verdier gir minimale besparelser)
-2. Oppdater fargegrient i CSS (`.scop-slider::-webkit-slider-runnable-track`)
-3. Oppdater tooltipteksten i informasjonsikonet
-4. Ved endringer i SCOP-området bør beregningslogikken i `calculateDerivedValues()` også gjennomgås
-
-### Legge til nye data
-
-For å legge til data for et nytt år:
-
-1. Opprett en ny JSON-fil i data-mappen (f.eks. `data2026.json`)
-2. Følg samme datastruktur som eksisterende JSON-filer
-3. Opprett en ny HTML-fil (f.eks. `data2026.html`) basert på eksisterende årsmal
-4. Opprett en ny JavaScript-fil (f.eks. `data2026.js`) for årets spesifikke funksjonalitet
-5. Oppdater navigasjonslenker i alle HTML-filer for å inkludere det nye året
-
-### Responsivitet
-
-Systemet er designet for å fungere godt på alle enheter. For å forbedre responsiviteten ytterligere:
-
-1. Juster breakpoints i media queries i `style.css` for å tilpasse ulike skjermstørrelser
-2. Tilpass chart.js-opsjoner i de ulike `dataXXXX.js`-filene for å optimalisere grafvisning på mobile enheter
-3. Modifiser `handleResponsiveness()` i `common.js` for å justere hvordan applikasjonen oppfører seg på ulike skjermstørrelser
-
-### Ytelsesoptimalisering
-
-Applikasjonen bruker flere teknikker for å sikre god ytelse:
-
-- Caching av JSON-data for å unngå unødvendige nettverkskall
-- Debouncing av SCOP-slider-hendelser for å redusere unødvendige oppdateringer
-- Lazy loading av grafer og innhold
-- Effektive DOM-manipulasjonsstrategier
-
-For å ytterligere forbedre ytelsen, vurder å:
-
-1. Implementere Service Workers for offline-støtte
-2. Optimalisere bilder og andre medieressurser
-3. Vurdere mer avanserte caching-strategier for data
-
-## Endre utseende
-
-For å endre farger og utseende, modifiser CSS-variabler i `:root`-selektoren i `style.css`:
-
-```css
-:root {
-    /* Hovedfarger */
-    --primary-color: #0088a9;
-    --secondary-color: #1e90ff;
-    --accent-color: #ffaa33;
-    
-    /* Bakgrunnsfarger */
-    --bg-light: #f5f5f5;
-    --bg-dark: #121212;
-    
-    /* Tekst farger */
-    --text-light: #333;
-    --text-dark: #f5f5f5;
-    
-    /* COP slider farger */
-    --cop-low: #ff4d4d;
-    --cop-mid: #ffcc00;
-    --cop-high: #4caf50;
-    
-    /* Andre variabler */
-    --transition-speed: 0.3s;
-    --border-radius: 8px;
-}
-```
-
-Modifiser disse variablene for å endre applikasjonens fargepalett og utseende konsekvent gjennom hele grensesnittet.
+1. **Legge til nye år**: Kopier eksisterende årsfil (HTML og JS) og endre årstall
+2. **Nye data**: Legg til nye datapunkter i JSON-filene
+3. **Design**: Tilpass farger og stiler i CSS-filen
+4. **Nye varmepumper**: Utvid varmepumpetabellen med flere modeller
 
 ## Bidrag
 
-Bidrag til prosjektet er velkomne. Følg disse trinnene for å bidra:
+Bidrag til prosjektet er velkomne! For å bidra:
 
-1. Fork repoet
-2. Opprett en feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit endringene dine (`git commit -m 'Legg til en amazing feature'`)
-4. Push til branch (`git push origin feature/amazing-feature`)
+1. Fork repositoriet
+2. Opprett en ny branch for din funksjonalitet (`git checkout -b funksjonalitet/amazing-feature`)
+3. Commit endringene dine (`git commit -m 'Legg til ny funksjonalitet'`)
+4. Push til branchen (`git push origin funksjonalitet/amazing-feature`)
 5. Åpne en Pull Request
-
-### Koderetningslinjer
-
-For å opprettholde kodekvalitet og konsistens, vennligst følg disse retningslinjene:
-
-- Bruk meningsfulle variabel- og funksjonsnavn
-- Kommenter komplekse beregninger og logikk
-- Hold funksjoner små og fokuserte
-- Skriv responsive og tilgjengelig kode
-- Test endringer på forskjellige enheter og nettlesere før innsending
-- Oppdater dokumentasjonen når du legger til eller endrer funksjonalitet
 
 ## Lisens
 
-Dette prosjektet er lisensiert under [MIT Lisens](LICENSE).
+Dette prosjektet er lisensiert under MIT-lisensen - se [LICENSE](LICENSE) filen for detaljer.
 
 ---
 

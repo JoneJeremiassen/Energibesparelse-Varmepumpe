@@ -47,6 +47,10 @@ function sortTable(columnIndex) {
             const energyOrder = {'A+++': 1, 'A++': 2, 'A+': 3, 'A': 4, 'B': 5, 'C': 6, 'D': 7};
             cellA = energyOrder[cellA.replace('*', '')] || 999;
             cellB = energyOrder[cellB.replace('*', '')] || 999;
+        } else if (columnIndex === 6) { // Forhandler - alfabetisk sortering
+            // Standard tekstsortering fungerer fint for forhandlere
+            cellA = cellA.toLowerCase();
+            cellB = cellB.toLowerCase();
         }
         
         // Sammenlign og sorter
@@ -74,7 +78,7 @@ function initTableSorting() {
     
     // Definer hvilke kolonner som skal være sorterbare (0-basert indeks)
     // 0 = Modell, 1 = Effekt, 2 = SCOP, 3 = Energiklasse, 4 = dB, 5 = Pris, 6 = Forhandler
-    const sortableColumns = [1, 2, 3, 4, 5]; // Kun effekt, SCOP, energiklasse, dB og pris
+    const sortableColumns = [1, 2, 3, 4, 5, 6]; // Effekt, SCOP, energiklasse, dB, pris og forhandler
     
     headers.forEach((header, index) => {
         // Sjekk om denne kolonnen skal være sorterbar
@@ -112,4 +116,12 @@ function initTableSorting() {
 // Kjør initTableSorting når siden er lastet
 document.addEventListener('DOMContentLoaded', () => {
     initTableSorting();
+    
+    // Sorter tabellen etter pris (stigende) som standard når siden lastes
+    setTimeout(() => {
+        const priceHeader = document.querySelector('.comparison-table th:nth-child(6)');
+        if (priceHeader) {
+            priceHeader.click();
+        }
+    }, 500);
 });

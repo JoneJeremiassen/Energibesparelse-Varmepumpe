@@ -31,8 +31,8 @@
   },
   {
     "måned": "Juli 2025",
-    "oppvarming": null,
-    "strømpris": null
+    "oppvarming": 1,
+    "strømpris": 1.02
   },
   {
     "måned": "August 2025",
